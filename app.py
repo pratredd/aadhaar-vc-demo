@@ -86,11 +86,11 @@ def post_schema_api():
         "schema_name":"aadharschema",
         "schema_version":"6.0"
     }
-    url="http://"+app.config["ISSUER_HOST"]+"/schemas"
+    url="http://"+app.config["FABER_IP"]+"/schemas"
     headers={'Content-type': 'application/json', 'Accept': 'text/plain'}
     r = requests.post(url, data=json.dumps(payload), headers=headers)
     data = r.json()
-    cred_url = "http://"+app.config["ISSUER_HOST"]+"/credential-definitions"
+    cred_url = "http://"+app.config["FABER_IP"]+"/credential-definitions"
     payload_cred = {
         "schema_id":data['schema_id'],
         'agent':'faber.agent.aadharschema'
@@ -100,7 +100,7 @@ def post_schema_api():
 
 @app.route('/create_invite')
 def create_invitation():
-    url="http://"+app.config["ISSUER_HOST"]+"/connections/create-invitation"
+    url="http://"+app.config["FABER_IP"]+"/connections/create-invitation"
     headers={'Content-type': 'application/json', 'Accept': 'application/json'}
     payload = {}
     r = requests.post(url,data=json.dumps(payload),headers=headers)
@@ -114,7 +114,7 @@ def create_invitation():
     img.save("static/images/displayQrInvite.png")
     print(img)
     #faber accept the invitation
-    #url="http://"+app.config["ISSUER_HOST"]+"/connections/"+connId+"/accept-invitation"
+    #url="http://"+app.config["FABER_IP"]+"/connections/"+connId+"/accept-invitation"
     #headers={'Accept': 'application/json'}
     #payload = {}
     #requests.post(url,data=json.dumps(payload),headers=headers)

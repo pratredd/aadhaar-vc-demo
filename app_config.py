@@ -27,4 +27,10 @@ SESSION_TYPE = "filesystem"
 # it's better to use a database-backed session store instead.
 
 #host name for Agent
-ISSUER_HOST = "ip172-18-0-35-civ0usogftqg00e3eup0-8021.direct.labs.play-with-docker.com"
+ISSUER_HOST = "http://ip172-18-0-87-cke3134snmng00flunog-8021.direct.labs.play-with-docker.com"
+
+#host name for Faber Agent
+FABER_HOST = os.getenv("FABER_IP")
+
+#host name for Alice Agent
+FABER_HOST = os.getenv("Alice_IP")

@@ -42,8 +42,8 @@ def login():
               "auth_response", _external=True
           ),  # Optional. If present, this absolute URL must match your app's redirect_uri registered in Azure Portal
       ),
-      faber=("https://aadhaar-vc-demo--pratheekred.repl.co//faberagent"),
-      alice=("https://aadhaar-vc-demo--pratheekred.repl.co//aliceagent"))
+      faber=("/faberagent"),
+      alice=("/aliceagent"))
 
 
 @app.route(app_config.REDIRECT_PATH)
@@ -98,6 +98,11 @@ def faber_agent():
   )
 
 
+@app.route('/aliceagent')
+def alice_agent():
+  return render_template('alice_homepage.html')
+
+
 @app.route('/publish_schema')
 def post_schema_api():
   payload = {
@@ -120,25 +125,42 @@ def post_schema_api():
 
 @app.route('/create_invite')
 def create_invitation():
-  url = "http://" + app.config["FABER_HOST"] + "/connections/create-invitation"
+  url1 = "http://" + app.config["FABER_HOST"] + "/connections/create-invitation"
   headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-  payload = {}
-  r = requests.post(url, data=json.dumps(payload), headers=headers)
-  rjson = json.loads(r.text)
+  payload1 = {}
+  r1 = requests.post(url1, data=json.dumps(payload1), headers=headers)
+  rjson1 = json.loads(r1.text)
   #retrieve the connection id from response
-  rjson['connection_id']
-  print(rjson)
-  print(rjson['invitation_url'])
+  rjson1['connection_id']
+  print(rjson1)
+  print(rjson1['invitation_url'])
   #print(r.text)
-  img = qrcode.make(rjson['invitation_url'])
+  img = qrcode.make(rjson1['invitation_url'])
   img.save("static/images/displayQrInvite.png")
   print(img)
+
   #faber accept the invitation
   #url="http://"+app.config["FABER_HOST"]+"/connections/"+connId+"/accept-invitation"
   #headers={'Accept': 'application/json'}
   #payload = {}
   #requests.post(url,data=json.dumps(payload),headers=headers)
-  return render_template('invite.html', result=rjson['connection_id'])
+  return render_template('invite.html', result1=rjson1["invitation"])
+
+
+@app.route('/aliceagent', methods=['POST'])
+def receiveinvitation():
+  #Alice recieves the invitation
+  invitation2 = request.form['invitation']
+  url2 = "http://" + app.config[
+      "ALICE_HOST"] + "/connections/receive-invitation"
+  headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+  payload2 = invitation2
+  r2 = requests.post(url2, data=json.dumps(payload2), headers=headers)
+  rjson2 = json.loads(r2.text)
+  rjson2['connection_id']
+  print(rjson2)
+
+  return render_template('receive.html', result1=rjson2['connection_id'])
 
 
 if __name__ == "__main__":

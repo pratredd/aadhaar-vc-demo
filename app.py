@@ -129,13 +129,14 @@ def create_invitation():
   headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
   payload1 = {}
   r1 = requests.post(url1, data=json.dumps(payload1), headers=headers)
+
   rjson1 = json.loads(r1.text)
   #retrieve the connection id from response
   rjson1['connection_id']
   print(rjson1)
   print(rjson1['invitation_url'])
   #print(r.text)
-  img = qrcode.make(rjson1['invitation_url'])
+  img = qrcode.make(rjson1['invitation'])
   img.save("static/images/displayQrInvite.png")
   print(img)
 
@@ -157,10 +158,21 @@ def receiveinvitation():
   payload2 = invitation2
   r2 = requests.post(url2, data=json.dumps(payload2), headers=headers)
   rjson2 = json.loads(r2.text)
-  rjson2['connection_id']
+  session['connectionid'] = rjson2['connection_id']
   print(rjson2)
 
-  return render_template('receive.html', result1=rjson2['connection_id'])
+  return render_template('receive.html', result2=rjson2['connection_id'], accept="/acceptinvitation")
+
+@app.route('/acceptinvitation')
+def acceptinvitation():
+  conn_id =session.get('connectionid')
+  url3 = "http://" + app.config[
+      "ALICE_HOST"] + "/connections/" + conn_id + "/accept-invitation"
+  headers = {'Accept': 'application/json'}
+  payload3 = ''
+  r3 = requests.post(url3, data=json.dumps(payload3), headers=headers)
+  rjson3 = json.loads(r3.text)
+  return render_template('request_sent.html', result3=rjson3['state'])
 
 
 if __name__ == "__main__":

@@ -131,6 +131,7 @@ def create_invitation():
   r1 = requests.post(url1, data=json.dumps(payload1), headers=headers)
 
   rjson1 = json.loads(r1.text)
+  invitation = json.dumps(rjson1['invitation'])
   #retrieve the connection id from response
   rjson1['connection_id']
   print(rjson1)
@@ -140,12 +141,7 @@ def create_invitation():
   img.save("static/images/displayQrInvite.png")
   print(img)
 
-  #faber accept the invitation
-  #url="http://"+app.config["FABER_HOST"]+"/connections/"+connId+"/accept-invitation"
-  #headers={'Accept': 'application/json'}
-  #payload = {}
-  #requests.post(url,data=json.dumps(payload),headers=headers)
-  return render_template('invite.html', result1=rjson1["invitation"])
+  return render_template('invite.html', result1=invitation.replace("'", "\""))
 
 
 @app.route('/aliceagent', methods=['POST'])
@@ -161,18 +157,23 @@ def receiveinvitation():
   session['connectionid'] = rjson2['connection_id']
   print(rjson2)
 
-  return render_template('receive.html', result2=rjson2['connection_id'], accept="/acceptinvitation")
+  return render_template('receive.html',
+                         result2=rjson2['connection_id'],
+                         accept="/acceptinvitation")
+
 
 @app.route('/acceptinvitation')
 def acceptinvitation():
-  conn_id =session.get('connectionid')
+  conn_id = session.get('connectionid')
   url3 = "http://" + app.config[
       "ALICE_HOST"] + "/connections/" + conn_id + "/accept-invitation"
   headers = {'Accept': 'application/json'}
   payload3 = ''
   r3 = requests.post(url3, data=json.dumps(payload3), headers=headers)
   rjson3 = json.loads(r3.text)
-  return render_template('request_sent.html', result3=rjson3['state'])
+  return render_template('request_sent.html',
+                         result3=rjson3['state'],
+                         login=("/login"))
 
 
 if __name__ == "__main__":

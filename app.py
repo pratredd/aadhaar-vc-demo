@@ -91,11 +91,10 @@ def call_downstream_api():
 
 @app.route('/faberagent')
 def faber_agent():
-  return render_template(
-      'faber_homepage.html',
-      createinvite="/create_invite",
-      publishschema="/publish_schema",
-  )
+  return render_template('faber_homepage.html',
+                         createinvite="/create_invite",
+                         publishschema="/publish_schema",
+                         acceptrequest="/accept_request")
 
 
 @app.route('/aliceagent')
@@ -174,6 +173,32 @@ def acceptinvitation():
   return render_template('request_sent.html',
                          result3=rjson3['state'],
                          login=("/login"))
+
+
+@app.route('/accept_request')
+def getacceptrequest():
+  url4 = "http://" + app.config["FABER_HOST"] + "/connections"
+  headers = {'Accept': 'application/json'}
+  r4 = requests.get(url4, headers=headers)
+  rjson4 = json.loads(r4.text)['results']
+  first = rjson4[0]
+  session['connectionid_req'] = first['connection_id']
+
+  return render_template('accept_request.html',
+                         result4=first['connection_id'],
+                         accepted="/request_accepted")
+
+
+@app.route('/request_accepted')
+def requestaccepted():
+  conn_id = session.get('connectionid_req')
+  url5 = "http://" + app.config[
+      "FABER_HOST"] + "/connections/" + conn_id + "/accept-request"
+  headers = {'Accept': 'application/json'}
+  payload5 = ''
+  r5 = requests.post(url5, data=json.dumps(payload5), headers=headers)
+  rjson5 = json.loads(r5.text)
+  return render_template('request_accepted.html', result5=r5)
 
 
 if __name__ == "__main__":

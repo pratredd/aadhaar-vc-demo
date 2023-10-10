@@ -94,13 +94,13 @@ def faber_agent():
   return render_template('faber_homepage.html',
                          createinvite="/create_invite",
                          publishschema="/publish_schema",
-                         acceptrequest="/accept_request")
+                         acceptrequest="/accept_request",
+                         createschema="/create_schema")
 
 
 @app.route('/aliceagent')
 def alice_agent():
   return render_template('alice_homepage.html')
-
 
 @app.route('/publish_schema')
 def post_schema_api():
@@ -120,7 +120,6 @@ def post_schema_api():
   }
   r = requests.post(cred_url, data=json.dumps(payload_cred), headers=headers)
   return render_template('publish.html', result=r.json())
-
 
 @app.route('/create_invite')
 def create_invitation():
@@ -142,7 +141,6 @@ def create_invitation():
 
   return render_template('invite.html', result1=invitation.replace("'", "\""))
 
-
 @app.route('/aliceagent', methods=['POST'])
 def receiveinvitation():
   #Alice recieves the invitation
@@ -160,7 +158,6 @@ def receiveinvitation():
                          result2=rjson2['connection_id'],
                          accept="/acceptinvitation")
 
-
 @app.route('/acceptinvitation')
 def acceptinvitation():
   conn_id = session.get('connectionid')
@@ -173,7 +170,6 @@ def acceptinvitation():
   return render_template('request_sent.html',
                          result3=rjson3['state'],
                          login=("/login"))
-
 
 @app.route('/accept_request')
 def getacceptrequest():
@@ -188,7 +184,6 @@ def getacceptrequest():
                          result4=first['connection_id'],
                          accepted="/request_accepted")
 
-
 @app.route('/request_accepted')
 def requestaccepted():
   conn_id2 = session.get('connectionid_req')
@@ -198,10 +193,27 @@ def requestaccepted():
   payload5 = ''
   r5 = requests.post(url5, data=json.dumps(payload5), headers=headers)
   rjson5 = json.loads(r5.text)
-  return render_template('request_accepted.html', result5=rjson5['state'])
+  return render_template('request_accepted.html', result5=rjson5['state'], login=("/login"))
 
+@app.route('/create_schema')
+def schema_form():
+  return render_template('create_schema.html')
+  
+@app.route('/create_schema')
+def createschema():
+  attributes = request.form['attributes']
+  url8 = "http://" + app.config[
+      "FABER_HOST"] + "/schemas"
+  headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+  payload = {
+      "attributes": [attributes],
+      "schema_name": "aadhaar_details",
+      "schema_version": "6.0"
+  }
+  r8 = requests.post(url8, data=json.dumps(payload), headers=headers)
+  rjson8 = json.loads(r8.text)
 
-#new change
+  return render_template('schema_created.html', schemaid=rjson8['schema_id'], attributes=rjson8['attrNames'])
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

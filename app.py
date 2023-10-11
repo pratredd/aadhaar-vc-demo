@@ -94,8 +94,7 @@ def faber_agent():
   return render_template('faber_homepage.html',
                          createinvite="/create_invite",
                          publishschema="/publish_schema",
-                         acceptrequest="/accept_request",
-                         createschema="/create_schema")
+                         acceptrequest="/accept_request", issuecredential="/issue_credentials")
 
 
 @app.route('/aliceagent')
@@ -195,25 +194,70 @@ def requestaccepted():
   rjson5 = json.loads(r5.text)
   return render_template('request_accepted.html', result5=rjson5['state'], login=("/login"))
 
-@app.route('/create_schema')
-def schema_form():
-  return render_template('create_schema.html')
-  
-@app.route('/create_schema')
-def createschema():
-  attributes = request.form['attributes']
-  url8 = "http://" + app.config[
-      "FABER_HOST"] + "/schemas"
-  headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-  payload = {
-      "attributes": [attributes],
-      "schema_name": "aadhaar_details",
-      "schema_version": "6.0"
-  }
-  r8 = requests.post(url8, data=json.dumps(payload), headers=headers)
-  rjson8 = json.loads(r8.text)
+@app.route('/issue_credentials')
+def issuecredential():
+  #conn_id3 = session.get('connectionid_req')
+  #issuer did
+  url11 = "http://" + app.config["FABER_HOST"] + "/wallet/did/public"
+  headers11 = {'Accept': 'text/plain'}
+  r11 = requests.get(url11, headers=headers11)
+  data11 = r11.json()['result']
+  #issuer_did = data11['did']
+  #schema id
+  url12 = "http://" + app.config["FABER_HOST"] + "/schemas/created"
+  headers12 = {'Accept': 'text/plain'}
+  r12 = requests.get(url12, headers=headers12)
+  data12 = r12.json()['schema_ids']
+  #schema_id = data12[0]
+  #credential definition id
+  url13 = "http://" + app.config["FABER_HOST"] + "/credential-definitions/created"
+  headers13 = {'Accept': 'text/plain'}
+  r13 = requests.get(url13, headers=headers13)
+  data13 = r13.json()['credential_definition_ids']
+  #cred_def_id = data13[0]
 
-  return render_template('schema_created.html', schemaid=rjson8['schema_id'], attributes=rjson8['attrNames'])
+  #issuing credential
+  url14 = "http://" + app.config["FABER_HOST"] + "/issue-credential-2.0/send"
+  headers14 = {'Content-type': 'application/json', 'Accept': 'text/plain'}  
+  payload14 = {
+  "auto_remove": 'true',
+  "comment": "Issuing credentials",
+  "connection_id": session.get('connectionid_req'),
+  "credential_preview": {
+    "@type": "issue-credential/2.0/credential-preview",
+    "attributes": [
+      { "name": "name", "value": "Alice Smith" },
+      { "name": "mobile number", "value": "1234567890" },
+      { "name": "mail", "value": "alice@gmail.com" }
+    ]
+  },
+  "filter": {
+    "indy": {
+      "cred_def_id": data13[0],
+      "issuer_did": data11['did'],
+      "schema_id": data12[0],
+      "schema_issuer_did": data11['did'],
+      "schema_name": "aadharschema",
+      "schema_version": "6.0"
+    }
+
+  },
+
+  "trace": "false"
+}
+  r14 = requests.post(url14, data=json.dumps(payload14), headers=headers14)
+  data14 = r14.json()
+
+  #to confirm issuance (records)
+  url15 = "http://" + app.config["FABER_HOST"] + "/issue-credential-2.0/records"
+  headers15 = {'Accept': 'text/plain'}
+  r15 = requests.get(url15, headers=headers15)
+  data15 = r15.json()['results']
+  
+  return render_template('issue_cred.html', 
+                         result=data15[0]['cred_ex_record']['state'],
+                         result1=data15[1]['cred_ex_record']['cred_proposal']['credential_preview']['attributes'])
+
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

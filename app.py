@@ -42,7 +42,7 @@ def login():
               "auth_response", _external=True
           ),  # Optional. If present, this absolute URL must match your app's redirect_uri registered in Azure Portal
       ),
-      faber=("/faberagent"),
+      aadhaar=("/aadhaaragent"),
       alice=("/aliceagent"))
 
 
@@ -89,20 +89,19 @@ def call_downstream_api():
   return render_template('display.html', result=api_result)
 
 
-@app.route('/faberagent')
-def faber_agent():
+@app.route('/aadhaaragent')
+def aadhar_agent():
   return render_template('aadhaar_homepage.html',
                          createinvite="/create_invite",
                          publishschema="/publish_schema",
                          acceptrequest="/accept_request",
                          issuecredential="/issue_credentials")
 
-
 @app.route('/aliceagent')
 def alice_agent():
-  return render_template('alice_homepage.html')
-
-
+  return render_template('alice_homepage.html',
+                         receiveinvite="/receive_invitation")
+  
 @app.route('/publish_schema')
 def post_schema_api():
   payload = {
@@ -143,8 +142,11 @@ def create_invitation():
 
   return render_template('invite.html', result1=invitation.replace("'", "\""))
 
-
-@app.route('/aliceagent', methods=['POST'])
+@app.route('/receive_invitation')
+def receive_inviteform():
+  return render_template('receive_invitation.html')
+    
+@app.route('/receive_invitation', methods=['POST'])
 def receiveinvitation():
   #Alice recieves the invitation
   invitation2 = request.form['invitation']

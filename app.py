@@ -91,20 +91,22 @@ def call_downstream_api():
 
 @app.route('/faberagent')
 def faber_agent():
-  return render_template('faber_homepage.html',
+  return render_template('aadhaar_homepage.html',
                          createinvite="/create_invite",
                          publishschema="/publish_schema",
-                         acceptrequest="/accept_request", issuecredential="/issue_credentials")
+                         acceptrequest="/accept_request",
+                         issuecredential="/issue_credentials")
 
 
 @app.route('/aliceagent')
 def alice_agent():
   return render_template('alice_homepage.html')
 
+
 @app.route('/publish_schema')
 def post_schema_api():
   payload = {
-      "attributes": ["name", "mobile number", "mail"],
+      "attributes": ["name", "mobile number", "mail", "address"],
       "schema_name": "aadharschema",
       "schema_version": "6.0"
   }
@@ -119,6 +121,7 @@ def post_schema_api():
   }
   r = requests.post(cred_url, data=json.dumps(payload_cred), headers=headers)
   return render_template('publish.html', result=r.json())
+
 
 @app.route('/create_invite')
 def create_invitation():
@@ -140,6 +143,7 @@ def create_invitation():
 
   return render_template('invite.html', result1=invitation.replace("'", "\""))
 
+
 @app.route('/aliceagent', methods=['POST'])
 def receiveinvitation():
   #Alice recieves the invitation
@@ -157,6 +161,7 @@ def receiveinvitation():
                          result2=rjson2['connection_id'],
                          accept="/acceptinvitation")
 
+
 @app.route('/acceptinvitation')
 def acceptinvitation():
   conn_id = session.get('connectionid')
@@ -169,6 +174,7 @@ def acceptinvitation():
   return render_template('request_sent.html',
                          result3=rjson3['state'],
                          login=("/login"))
+
 
 @app.route('/accept_request')
 def getacceptrequest():
@@ -183,6 +189,7 @@ def getacceptrequest():
                          result4=first['connection_id'],
                          accepted="/request_accepted")
 
+
 @app.route('/request_accepted')
 def requestaccepted():
   conn_id2 = session.get('connectionid_req')
@@ -192,59 +199,74 @@ def requestaccepted():
   payload5 = ''
   r5 = requests.post(url5, data=json.dumps(payload5), headers=headers)
   rjson5 = json.loads(r5.text)
-  return render_template('request_accepted.html', result5=rjson5['state'], login=("/login"))
+  return render_template('request_accepted.html',
+                         result5=rjson5['state'],
+                         login=("/login"))
+
 
 @app.route('/issue_credentials')
 def issuecredential():
-  #conn_id3 = session.get('connectionid_req')
+  conn_id3 = session.get('connectionid_req')
+  print("conn_id3:", conn_id3)
   #issuer did
   url11 = "http://" + app.config["FABER_HOST"] + "/wallet/did/public"
   headers11 = {'Accept': 'text/plain'}
   r11 = requests.get(url11, headers=headers11)
   data11 = r11.json()['result']
-  #issuer_did = data11['did']
+  issuer_did = data11['did']
+  print("issuer_did:", issuer_did)
   #schema id
   url12 = "http://" + app.config["FABER_HOST"] + "/schemas/created"
   headers12 = {'Accept': 'text/plain'}
   r12 = requests.get(url12, headers=headers12)
   data12 = r12.json()['schema_ids']
-  #schema_id = data12[0]
+  schema_id = data12[0]
+  print("schema_id:", schema_id)
   #credential definition id
-  url13 = "http://" + app.config["FABER_HOST"] + "/credential-definitions/created"
+  url13 = "http://" + app.config[
+      "FABER_HOST"] + "/credential-definitions/created"
   headers13 = {'Accept': 'text/plain'}
   r13 = requests.get(url13, headers=headers13)
   data13 = r13.json()['credential_definition_ids']
-  #cred_def_id = data13[0]
+  cred_def_id = data13[0]
+  print("cred_def_id:", cred_def_id)
 
   #issuing credential
   url14 = "http://" + app.config["FABER_HOST"] + "/issue-credential-2.0/send"
-  headers14 = {'Content-type': 'application/json', 'Accept': 'text/plain'}  
+  headers14 = {'Content-type': 'application/json', 'Accept': 'text/plain'}
   payload14 = {
-  "auto_remove": 'true',
-  "comment": "Issuing credentials",
-  "connection_id": session.get('connectionid_req'),
-  "credential_preview": {
-    "@type": "issue-credential/2.0/credential-preview",
-    "attributes": [
-      { "name": "name", "value": "Alice Smith" },
-      { "name": "mobile number", "value": "1234567890" },
-      { "name": "mail", "value": "alice@gmail.com" }
-    ]
-  },
-  "filter": {
-    "indy": {
-      "cred_def_id": data13[0],
-      "issuer_did": data11['did'],
-      "schema_id": data12[0],
-      "schema_issuer_did": data11['did'],
-      "schema_name": "aadharschema",
-      "schema_version": "6.0"
-    }
-
-  },
-
-  "trace": "false"
-}
+      "auto_remove": 'true',
+      "comment": "Issuing credentials",
+      "connection_id": session.get('connectionid_req'),
+      "credential_preview": {
+          "@type":
+          "issue-credential/2.0/credential-preview",
+          "attributes": [{
+              "name": "name",
+              "value": "Alice Smith"
+          }, {
+              "name": "mobile number",
+              "value": "1234567890"
+          }, {
+              "name": "mail",
+              "value": "alice@gmail.com"
+          }, {
+              "name": "address",
+              "value": "123 Main Street, Cambridge"
+          }]
+      },
+      "filter": {
+          "indy": {
+              "cred_def_id": data13[0],
+              "issuer_did": data11['did'],
+              "schema_id": data12[0],
+              "schema_issuer_did": data11['did'],
+              "schema_name": "aadharschema",
+              "schema_version": "6.0"
+          }
+      },
+      "trace": "false"
+  }
   r14 = requests.post(url14, data=json.dumps(payload14), headers=headers14)
   data14 = r14.json()
 
@@ -253,10 +275,11 @@ def issuecredential():
   headers15 = {'Accept': 'text/plain'}
   r15 = requests.get(url15, headers=headers15)
   data15 = r15.json()['results']
-  
-  return render_template('issue_cred.html', 
+  session['cred_ex_id']=data15[0]['cred_ex_record']['cred_ex_id']
+  return render_template('issue_cred.html',
                          result=data15[0]['cred_ex_record']['state'],
-                         result1=data15[1]['cred_ex_record']['cred_proposal']['credential_preview']['attributes'])
+                         result1=data15[1]['cred_ex_record']['cred_proposal']
+                         ['credential_preview']['attributes'], result2=data15[0]['cred_ex_record']['cred_ex_id'])
 
 
 if __name__ == "__main__":

@@ -100,7 +100,7 @@ def aadhar_agent():
 @app.route('/aliceagent')
 def alice_agent():
   return render_template('alice_homepage.html',
-                         receiveinvite="/receive_invitation")
+                         receiveinvite="/receive_invitation", viewcredential="/view_credential")
   
 @app.route('/publish_schema')
 def post_schema_api():
@@ -189,7 +189,9 @@ def getacceptrequest():
 
   return render_template('accept_request.html',
                          result4=first['connection_id'],
-                         accepted="/request_accepted")
+                         name=first['their_label'],
+                         accepted="/request_accepted",
+                        login=("/login"))
 
 
 @app.route('/request_accepted')
@@ -278,11 +280,31 @@ def issuecredential():
   r15 = requests.get(url15, headers=headers15)
   data15 = r15.json()['results']
   session['cred_ex_id']=data15[0]['cred_ex_record']['cred_ex_id']
-  return render_template('issue_cred.html',
+  return render_template('issue_cred.html', login=("/login"),
                          result=data15[0]['cred_ex_record']['state'],
                          result1=data15[1]['cred_ex_record']['cred_proposal']
                          ['credential_preview']['attributes'], result2=data15[0]['cred_ex_record']['cred_ex_id'])
 
-
+@app.route('/view_credential')
+def viewcredential():
+  url16 = "http://" + app.config["ALICE_HOST"] + "/issue-credential-2.0/records"
+  headers16 = {'Accept': 'text/plain'}
+  r16 = requests.get(url16, headers=headers16)
+  cred_ex_id = r16.json()['results'][0]['cred_ex_record']['cred_ex_id']
+  #store credentials
+  url17 = "http://" + app.config["ALICE_HOST"] + "/issue-credential-2.0/records/" + cred_ex_id + "/store"
+  headers17 = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+  payload17='{}'
+  r17 = requests.post(url17, data=json.dumps(payload17), headers=headers17)
+  #fetch credentials
+  url18 = "http://" + app.config["ALICE_HOST"] + "/credentials"
+  headers18 = {'Accept': 'text/plain'}
+  r18 = requests.get(url18, headers=headers18)
+  attributes = r18.json()['results'][0]['attrs']
+  return render_template('view_cred.html', result=cred_ex_id, name = attributes.get("name"),
+                         mail = attributes.get("mail"),
+                        mobile_number = attributes.get("mobile number"),
+                        address = attributes.get("address"), login=("/login"))
+  
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

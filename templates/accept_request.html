@@ -5,7 +5,9 @@
 </head>
 <body>
   <h1>Accept Request</h1>
-  <h3>You have received a request from Alice with connection id: {{ result4 }}</h3>
+  <h3>You have received a request<h3>
+    <h2>From: {{ name }}</h2>
+    <h2>connection id: {{ result4 }}</h2>
 
   <button onclick="window.location.href = '{{ accepted }}';">Accept Request</button>
   <br>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alice Credentials</title>
+</head>
+<body>
+  <h1>Credentials</h1>
+  <h2>cred_ex_id:  {{ result }} </h2>
+
+  <table border="1">
+    <tr>
+      <td>Name</td>
+      <td>{{ name }}</td>
+    </tr>
+    <tr>
+      <td>E-Mail</td>
+      <td>{{ mail }}</td>
+    </tr>
+    <tr>
+      <td>Contact</td>
+      <td>{{ mobile_number }}</td>
+    </tr>
+    <tr>
+      <td>Address</td>
+      <td>{{ address }}</td>
+    </tr>
+  </table>
+<br>
+<br>  
+   <button onclick="window.location.href = '{{ login }}';">Go to main menu</button> 
+</body>
+</html>

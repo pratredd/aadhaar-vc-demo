@@ -2,30 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SSI Web App: Login</title>
+    <title>Self Sovereign Identity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}" />
 </head>
-<body>
-    <h1>SSI Web App</h1>
+<style>
+   * {
+    /*margin: 0;*/
+    padding: 0;
+    outline: none;
+}
 
-    {% if user_code %}
-    <ol>
-      <li>To sign in, type <b>{{ user_code }}</b> into
+</style>
+<body class="container">
+
+
+   <!-- <hr>
+    <footer style="text-align: right">SSI Web App Sample {{ version }}</footer>
+-->
+<!--******** New UI changes *********-->
+
+   <div id="content">
+       <img src="{{ url_for('static', filename='images/logo.png') }}" style="    left: 100px;
+    position: relative;" alt="Accenture" width="150"/>
+        <p class="head1-text">
+
+Self Sovereign Identity
+
+ </p><ul>
+          {% if user_code %}
+
+      <!--<li>To sign in, type <b>{{ user_code }}</b> into
         <a href='{{ auth_uri }}' target=_blank>{{ auth_uri }}</a>
         to authenticate.
-      </li>
-      <li>And then <a href="{{ url_for('auth_response') }}">proceed</a>.</li>
-    </ol>
-    {% else %}
-    <ul><li><a href='{{ auth_uri }}'>Sign In</a></li></ul>
-    {% endif %}
-    <ul><li><a href='{{ aadhaar }}'>Go to Aadhaar Agent</a></li></ul>
-      <ul><li><a href='{{ alice }}'>Go to Alice Agent</a></li></ul>
-    {% if config.get("B2C_RESET_PASSWORD_AUTHORITY") %}
-    <a href="{{config.get('B2C_RESET_PASSWORD_AUTHORITY')}}?client_id={{config.get('CLIENT_ID')}}">Reset Password</a>
-    {% endif %}
+      </li>-->
+       <li><button type="submit" class="btn-rdrct"><a href='{{ auth_uri }}' target=_blank>To sign in, type <b>{{ user_code }}</b> into {{ auth_uri }} to authenticate.</a></button></li>
+      <!--<li>And then <a href="{{ url_for('auth_response') }}">proceed</a>.</li>-->
+        <li><button type="submit" class="btn-rdrct"><a href="{{ url_for('auth_response') }}">proceed</a>.</button></li>
 
-    <hr>
-    <footer style="text-align: right">SSI Web App Sample {{ version }}</footer>
+    {% else %}
+    <li><!--<a href='{{ auth_uri }}'>Sign In</a>-->
+       <button type="submit" class="btn-rdrct"><a href='{{ auth_uri }}'>Sign In</a></button></li>
+    {% endif %}
+<li>
+       <button type="submit" class="btn-rdrct"><a href='{{ aadhaar }}'>Go to Aadhaar Agent</a></button></li>
+      <!--<a href='{{ alice }}'>Go to Alice hhh Agent</a>-->
+    <li>   <button type="submit" class="btn-rdrct"><a href='{{ alice }}'>Go to Alice Agent</a></button></li>
+    {% if config.get("B2C_RESET_PASSWORD_AUTHORITY") %}
+    <!--<a href="{{config.get('B2C_RESET_PASSWORD_AUTHORITY')}}?client_id={{config.get('CLIENT_ID')}}">Reset Password</a>-->
+     <li>  <button type="submit"  class="btn-rdrct"><a href='{{config.get('B2C_RESET_PASSWORD_AUTHORITY')}}?client_id={{config.get('CLIENT_ID')}}'>Reset Password</a></button></li>
+    {% endif %}
+</ul>
+    </div>
+
 </body>
 </html>
 

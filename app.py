@@ -224,7 +224,7 @@ def issuecredential():
   headers12 = {'Accept': 'text/plain'}
   r12 = requests.get(url12, headers=headers12)
   data12 = r12.json()['schema_ids']
-  schema_id = data12[1]
+  schema_id = data12[0]
   print("schema_id:", schema_id)
   #credential definition id
   url13 = "http://" + app.config[
@@ -232,7 +232,7 @@ def issuecredential():
   headers13 = {'Accept': 'text/plain'}
   r13 = requests.get(url13, headers=headers13)
   data13 = r13.json()['credential_definition_ids']
-  cred_def_id = data13[1]
+  cred_def_id = data13[0]
   print("cred_def_id:", cred_def_id)
 
   #issuing credential
@@ -249,7 +249,7 @@ def issuecredential():
               "name": "name",
               "value": "Alice Smith"
           }, {
-              "name": "mobile number",
+              "name": "mobile_number",
               "value": "1234567890"
           }, {
               "name": "mail",
@@ -261,19 +261,19 @@ def issuecredential():
       },
       "filter": {
           "indy": {
-              "cred_def_id": data13[1],
+              "cred_def_id": data13[0],
               "issuer_did": data11['did'],
-              "schema_id": data12[1],
+              "schema_id": data12[0],
               "schema_issuer_did": data11['did'],
-              "schema_name": "aadharschema",
-              "schema_version": "6.0"
+              "schema_name": "aadhaar schema",
+              "schema_version": "1.46.84"
           }
       },
       "trace": "false"
   }
   r14 = requests.post(url14, data=json.dumps(payload14), headers=headers14)
   data14 = r14.json()
-
+  print(data14)
   #to confirm issuance (records)
   url15 = "http://" + app.config["FABER_HOST"] + "/issue-credential-2.0/records"
   headers15 = {'Accept': 'text/plain'}
@@ -282,8 +282,7 @@ def issuecredential():
   session['cred_ex_id']=data15[0]['cred_ex_record']['cred_ex_id']
   return render_template('issue_cred.html', login=("/login"),
                          result=data15[0]['cred_ex_record']['state'],
-                         result1=data15[1]['cred_ex_record']['cred_proposal']
-                         ['credential_preview']['attributes'], result2=data15[0]['cred_ex_record']['cred_ex_id'])
+                         result2=data15[0]['cred_ex_record']['cred_ex_id'])
 
 @app.route('/view_credential')
 def viewcredential():
@@ -291,20 +290,23 @@ def viewcredential():
   headers16 = {'Accept': 'text/plain'}
   r16 = requests.get(url16, headers=headers16)
   cred_ex_id = r16.json()['results'][0]['cred_ex_record']['cred_ex_id']
+  print("cred_ex_id:", cred_ex_id)
   #store credentials
-  url17 = "http://" + app.config["ALICE_HOST"] + "/issue-credential-2.0/records/" + cred_ex_id + "/store"
+  url17 = "http://" + app.config[
+  "ALICE_HOST"] + "/issue-credential-2.0/records/" + cred_ex_id + "/store"
   headers17 = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-  payload17='{}'
+  payload17=''
   r17 = requests.post(url17, data=json.dumps(payload17), headers=headers17)
+  data17=r17.json()
   #fetch credentials
   url18 = "http://" + app.config["ALICE_HOST"] + "/credentials"
   headers18 = {'Accept': 'text/plain'}
   r18 = requests.get(url18, headers=headers18)
   attributes = r18.json()['results'][0]['attrs']
   return render_template('view_cred.html', result=cred_ex_id, name = attributes.get("name"),
-                         mail = attributes.get("mail"),
-                        mobile_number = attributes.get("mobile number"),
-                        address = attributes.get("address"), login=("/login"))
+     mail = attributes.get("mail"),
+    mobile_number = attributes.get("mobile number"),
+    address = attributes.get("address"), login=("/login"))
   
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

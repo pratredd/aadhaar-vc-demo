@@ -224,7 +224,7 @@ def issuecredential():
   headers12 = {'Accept': 'text/plain'}
   r12 = requests.get(url12, headers=headers12)
   data12 = r12.json()['schema_ids']
-  schema_id = data12[0]
+  schema_id = data12[1]
   print("schema_id:", schema_id)
   #credential definition id
   url13 = "http://" + app.config[
@@ -232,7 +232,7 @@ def issuecredential():
   headers13 = {'Accept': 'text/plain'}
   r13 = requests.get(url13, headers=headers13)
   data13 = r13.json()['credential_definition_ids']
-  cred_def_id = data13[0]
+  cred_def_id = data13[1]
   print("cred_def_id:", cred_def_id)
 
   #issuing credential
@@ -261,9 +261,9 @@ def issuecredential():
       },
       "filter": {
           "indy": {
-              "cred_def_id": data13[0],
+              "cred_def_id": data13[1],
               "issuer_did": data11['did'],
-              "schema_id": data12[0],
+              "schema_id": data12[1],
               "schema_issuer_did": data11['did'],
               "schema_name": "aadharschema",
               "schema_version": "6.0"

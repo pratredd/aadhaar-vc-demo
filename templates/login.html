@@ -20,6 +20,8 @@
     {% endif %}
     <ul><li><a href='{{ aadhaar }}'>Go to Aadhaar Agent</a></li></ul>
       <ul><li><a href='{{ alice }}'>Go to Alice Agent</a></li></ul>
+  <ul><li><a href='{{ bank }}'>Go to Bank</a></li></ul>
+  
     {% if config.get("B2C_RESET_PASSWORD_AUTHORITY") %}
     <a href="{{config.get('B2C_RESET_PASSWORD_AUTHORITY')}}?client_id={{config.get('CLIENT_ID')}}">Reset Password</a>
     {% endif %}

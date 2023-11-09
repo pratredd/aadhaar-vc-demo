@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Presentation Request</title>
+</head>
+<body>
+  <h1>BANK</h1>
+  <h1>Presentation by Alice</h1>
+  <h3>Verification State: {{ result1 }}</h3>
+  <h3>pres_ex_id: {{ result }}</h3>
+  <br>
+  <h3>Name: {{ name }}</h3>
+  <h3>Mobile Number: {{ phone }}</h3>
+  <h3>Address: {{ address }}</h3>
+  <h3>E-Mail: {{ mail }}</h3>
+  <button onclick="window.location.href = '{{ createaccount }}';">Create Account</button>
+  <br>
+  <br>
+  <button onclick="window.location.href = '{{ login }}';">Go to main menu</button>
+</body>
+</html>

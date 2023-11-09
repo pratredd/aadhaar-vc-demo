@@ -43,7 +43,8 @@ def login():
           ),  # Optional. If present, this absolute URL must match your app's redirect_uri registered in Azure Portal
       ),
       aadhaar=("/aadhaaragent"),
-      alice=("/aliceagent"))
+      alice=("/aliceagent"),
+      bank=("/bankagent"))
 
 
 @app.route(app_config.REDIRECT_PATH)
@@ -101,6 +102,12 @@ def aadhar_agent():
 def alice_agent():
   return render_template('alice_homepage.html',
                          receiveinvite="/receive_invitation", viewcredential="/view_credential")
+
+@app.route('/bankagent')
+def bank_agent():
+    return render_template('bank_homepage.html',
+                          presentreq="/presentation_req",
+                          viewpresentation="/viewpresentation")
   
 @app.route('/publish_schema')
 def post_schema_api():
@@ -232,8 +239,8 @@ def issuecredential():
   headers13 = {'Accept': 'text/plain'}
   r13 = requests.get(url13, headers=headers13)
   data13 = r13.json()['credential_definition_ids']
-  cred_def_id = data13[0]
-  print("cred_def_id:", cred_def_id)
+  session['cred_def_id'] = data13[0]
+  # print("cred_def_id:", session.get('cred_def_id')
 
   #issuing credential
   url14 = "http://" + app.config["FABER_HOST"] + "/issue-credential-2.0/send"
@@ -266,7 +273,7 @@ def issuecredential():
               "schema_id": data12[0],
               "schema_issuer_did": data11['did'],
               "schema_name": "aadhaar schema",
-              "schema_version": "1.46.84"
+              "schema_version": "36.43.98"
           }
       },
       "trace": "false"
@@ -307,6 +314,103 @@ def viewcredential():
      mail = attributes.get("mail"),
     mobile_number = attributes.get("mobile number"),
     address = attributes.get("address"), login=("/login"))
+
+@app.route('/presentation_req')
+def presentationreq():
+  conn_id2 = session.get('connectionid_req')
+  url19 = "http://" + app.config[
+      "FABER_HOST"] + "/present-proof-2.0/send-request"
+  headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+  payload19 = {
+  "comment": "This is a comment about the reason for the proof",
+  "connection_id": conn_id2,
+  "presentation_request": {
+    "indy": {
+      "name": "Proof of Identity",
+      "version": "1.0",
+      "requested_attributes": {
+        "0_name_uuid": {
+          "name": "name",
+          "restrictions": [
+            {
+              "cred_def_id": session.get('cred_def_id')
+            }
+          ]
+        },
+        "0_date_uuid": {
+          "name": "mail",
+          "restrictions": [
+            {
+              "cred_def_id": session.get('cred_def_id')
+            }
+          ]
+        },
+        "0_degree_uuid": {
+          "name": "address",
+          "restrictions": [
+            {
+              "cred_def_id": session.get('cred_def_id')
+            }
+          ]
+        },
+        "0_self_attested_thing_uuid": {
+          "name": "self_attested_thing"
+        }
+      },
+      "requested_predicates": {
+        "0_age_GE_uuid": {
+          "name": "mobile_number",
+          "p_type": "<=",
+          "p_value": 1234567890,
+          "restrictions": [
+            {
+              "cred_def_id": session.get('cred_def_id')
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+  r19 = requests.post(url19, data=json.dumps(payload19), headers=headers)
+  rjson19 = r19.json()['state']
+  return render_template('presetation_req.html',
+                         result=rjson19,
+                         login=("/login"))
+
+@app.route('/viewpresentation')
+def viewpresentation():
+  url20 = "http://" + app.config[
+  "FABER_HOST"] + "/present-proof-2.0/records"
+  headers20 = {'Content-type': 'application/json'}
+  r20 = requests.get(url20, headers=headers20)
+  pres_ex_id = r20.json()['results'][0]['pres_ex_id']
+#view presentation with pres_ex_id
+  url21 = "http://" + app.config[
+  "FABER_HOST"] + "/present-proof-2.0/records/" + pres_ex_id
+  headers21 = {'Content-type': 'application/json'}
+  r21 = requests.get(url21, headers=headers21)
+  r_name = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['name']
+
+  r_phone = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['mobile_number']
+  
+  r_address = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['address']
+  
+  r_mail = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['mail']
+  state = r21.json()['state']
+  return render_template('view_presetation.html',
+                         result=pres_ex_id,
+                         result1=state,
+                         name=r_name,
+                         phone=r_phone,
+                         address=r_address,
+                         mail=r_mail,
+                         login=("/login"),
+                        createaccount=("/createaccount"))
+
+@app.route("/createaccount")
+def createaccount():
+  return render_template("account_created.html")
   
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

@@ -101,7 +101,8 @@ def aadhar_agent():
 @app.route('/aliceagent')
 def alice_agent():
   return render_template('alice_homepage.html',
-                         receiveinvite="/receive_invitation", viewcredential="/view_credential")
+                         receiveinvite="/receive_invitation", viewcredential="/view_credential",
+sendpresentation="/sendpresentation")
 
 @app.route('/bankagent')
 def bank_agent():
@@ -273,7 +274,7 @@ def issuecredential():
               "schema_id": data12[0],
               "schema_issuer_did": data11['did'],
               "schema_name": "aadhaar schema",
-              "schema_version": "36.43.98"
+              "schema_version": "22.26.11"
           }
       },
       "trace": "false"
@@ -312,7 +313,7 @@ def viewcredential():
   attributes = r18.json()['results'][0]['attrs']
   return render_template('view_cred.html', result=cred_ex_id, name = attributes.get("name"),
      mail = attributes.get("mail"),
-    mobile_number = attributes.get("mobile number"),
+    mobile_number = attributes.get("mobile_number"),
     address = attributes.get("address"), login=("/login"))
 
 @app.route('/presentation_req')
@@ -411,6 +412,19 @@ def viewpresentation():
 @app.route("/createaccount")
 def createaccount():
   return render_template("account_created.html")
+
+@app.route("/sendpresentation")
+def sendpresentation():
+  url = "http://" + app.config["ALICE_HOST"] + "/credentials"
+  headers = {'Accept': 'text/plain'}
+  r = requests.get(url, headers=headers)
+  attributes = r.json()['results'][0]['attrs']
+  
+  return render_template('send_presentation.html', name = attributes.get("name"),
+     mail = attributes.get("mail"),
+    mobile_number = attributes.get("mobile_number"),
+    address = attributes.get("address"), login=("/login"))
+
   
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

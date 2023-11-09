@@ -1,13 +1,78 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Alice Agent</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SSI Web App: Login</title>
+<style>
+  body {
+    background-color: white
+      }
+.container {
+  color: black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 80%;
+background-color: #357179;
+}
+.button {
+  background-color: #357179;
+  color: black;
+  border: 2px solid #357179;
+  height: 50px;
+
+}
+
+.button:hover {
+  text-decoration: none;
+     background-color: white;
+}
+.button2 {
+  background-color: #357179;
+  color: black;
+  border: 2px solid #357179;
+  height: 50px;
+
+}
+
+.button2:hover {
+  text-decoration: none;
+     background-color: white;
+}
+
+
+.button1 {border-radius: 8px;}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container1{
+background-color: white;}
+
+h4{
+color:black;
+font-family: "Times New Roman", Times, serif;
+font-size: 15px;
+}
+h1{ 
+text-align:"center";}
+
+  </style>
 </head>
 <body>
-  <h1>ALICE HOMEPAGE</h1>
+<div class = container>
+<img src="static/images/logo.png" width="50px",height="50px" >
+<h1>ALICE HOMEPAGE</h1>
+</div>
+<div class = container1>
+<br>  
+<div class = center>    
+<ul><button class="button button1"><a href='{{ receiveinvite }}'><h4>Receive Invitation</h4></a></button></ul></div>
+<div class = center>   
+<ul><button class="button2 button1"><a href='{{ viewcredential }}'><h4>View Credential</h4></a></button></ul></div>
+  <div class = center>   
+  <ul><button class="button2 button1"><a href='{{ sendpresentation }}'><h4>Send Presentation</h4></a></button></ul></div>
 
-  <ul><li><a href='{{ receiveinvite }}'>Receive Invitation</a></li></ul>
-  <ul><li><a href='{{ viewcredential }}'>View Credential</a></li></ul>
-  
+
 </body>
 </html>
+

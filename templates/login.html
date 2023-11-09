@@ -1,33 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SSI Web App: Login</title>
+<meta charset="UTF-8">
+<title>SSI Web App: Login</title>
+<style>
+  body {
+    background-color: white
+      }
+.container {
+  color: black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 80%;
+background-color: lightblue;
+}
+.button {
+  background-color: lightblue;
+  color: black;
+  border: 2px solid #add8e6;
+  height: 50px;
+
+}
+
+.button:hover {
+  text-decoration: none;
+     background-color: white;
+}
+.button1 {border-radius: 8px;}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container1{
+background-color: white;}
+
+h4{
+color:black;
+font-family: "Times New Roman", Times, serif;
+font-size: 15px;
+}
+
+  </style>
 </head>
 <body>
-    <h1>SSI Web App</h1>
+<div class = container>
+<img src="static/images/logo.png" width="50px",height="50px" >
+<h1>SSI Web App</h1>
+</div>
+<div class = container1>
+<br>  
+<div class = center>    
+<ul><button class="button button1"><a href='{{ auth_uri }}'><h4>Sign In</h4></a></button></ul></div>
+<div class = center>   
+<ul><button class="button button1"><a href='{{ aadhaar }}'><h4>Go to Aadhaar Agent</h4></a></button></ul></div>
+<div class = center>
+<ul><button class="button button1"><a href='{{ alice }}'> <h4>Go to Alice Agent</h4></a></button></ul></div>
+<div class = center>
+<ul><button class="button button1"><a href='{{ bank }}'><h4>Go to Bank</h4></a></button></ul></div>
 
-    {% if user_code %}
-    <ol>
-      <li>To sign in, type <b>{{ user_code }}</b> into
-        <a href='{{ auth_uri }}' target=_blank>{{ auth_uri }}</a>
-        to authenticate.
-      </li>
-      <li>And then <a href="{{ url_for('auth_response') }}">proceed</a>.</li>
-    </ol>
-    {% else %}
-    <ul><li><a href='{{ auth_uri }}'>Sign In</a></li></ul>
-    {% endif %}
-    <ul><li><a href='{{ aadhaar }}'>Go to Aadhaar Agent</a></li></ul>
-      <ul><li><a href='{{ alice }}'>Go to Alice Agent</a></li></ul>
-  <ul><li><a href='{{ bank }}'>Go to Bank</a></li></ul>
-  
-    {% if config.get("B2C_RESET_PASSWORD_AUTHORITY") %}
-    <a href="{{config.get('B2C_RESET_PASSWORD_AUTHORITY')}}?client_id={{config.get('CLIENT_ID')}}">Reset Password</a>
-    {% endif %}
+
+<br><br><br>
+   <h4>*This is page for convenient navigation</h4>
 
     <hr>
-    <footer style="text-align: right">SSI Web App Sample {{ version }}</footer>
+<footer style="text-align: right">SSI Web App Sample {{ version }}</footer></div>
 </body>
 </html>
-

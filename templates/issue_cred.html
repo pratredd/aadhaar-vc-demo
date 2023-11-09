@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Issue Credentials</title>
+<head>
+<title>Issue Credentials</title>
+ 
+<style>
+.container {
+  color: black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 80%;
+background-color: pink;
+}
+.container1{
+text-align:center;}
+</style>
 </head>
 <body>
-  <h1>AADHAAR</h1>
-  <h1>Credentials</h1>
-  <h3>State: {{ result }}</h3>
-  <h2>The Aadhar details has been issued to Alice</h2>
-  <h3> Cred_ex_id: {{ result2 }}</h3>
-
+<div class = container>
+<img src="static/images/logo.png" width="50px",height="50px" >
+<h1>AADHAAR</h1>
+</div>
+<div class = container1>
+<h1>Credentials</h1>
+<h3>State: {{ result }}</h3>
+<h2>The Aadhar details has been issued to Alice</h2>
+<h3> Cred_ex_id: {{ result2 }}</h3>
+ 
   <button onclick="window.location.href = '{{ login }}';">Go to main menu</button>
+</div>
 </body>
 </html>

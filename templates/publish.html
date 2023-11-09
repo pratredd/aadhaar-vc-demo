@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Published Schema</title>
+<meta charset="UTF-8">
+<title>Published Schema</title>
+ 
+<style>
+.container1{
+text-align:center;}
+ 
+.button {
+  background-color: pink;
+  color: black;
+  border: 2px solid pink;
+  height: 40px;
+width:100px;
+padding-down:20px;
+}
+ 
+.button:hover {
+  text-decoration: none;
+     background-color: white;
+}
+.button1 {border-radius: 8px;}
+ 
+ 
+</style>
 </head>
 <body>
-    <a href="javascript:window.history.go(-1)">Back</a> <!-- Displayed on top of a potentially large JSON response, so it will remain visible -->
-    <h1>Result of the Publish API Call</h1>
-    <pre>{{ result |tojson(indent=4) }}</pre> <!-- Just a generic json viewer -->
+<div class = container1>
+ 
+   <button class="button button1"> <a href="javascript:window.history.go(-1)">Back</a> <!-- Displayed on top of a potentially large JSON response, so it will remain visible --></button>
+<h1>Result of the Publish API Call</h1>
+<pre>{{ result |tojson(indent=4) }}</pre> <!-- Just a generic json viewer --></div>
 </body>
 </html>

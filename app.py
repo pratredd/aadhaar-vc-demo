@@ -274,7 +274,7 @@ def issuecredential():
               "schema_id": data12[0],
               "schema_issuer_did": data11['did'],
               "schema_name": "aadhaar schema",
-              "schema_version": "22.26.11"
+              "schema_version": "1.85.44"
           }
       },
       "trace": "false"
@@ -316,68 +316,29 @@ def viewcredential():
     mobile_number = attributes.get("mobile_number"),
     address = attributes.get("address"), login=("/login"))
 
+
+
+
 @app.route('/presentation_req')
-def presentationreq():
+def presentation_req():
+  cred_ex_id = session.get('cred_def_id')
   conn_id2 = session.get('connectionid_req')
+  return render_template('presentation_req.html', cred_ex_id=cred_ex_id, conn_id=conn_id2)
+
+@app.route('/presentation_req', methods=['POST'])
+def presentationreq():
+  input_payload = request.form['pres_req']
   url19 = "http://" + app.config[
-      "FABER_HOST"] + "/present-proof-2.0/send-request"
-  headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-  payload19 = {
-  "comment": "This is a comment about the reason for the proof",
-  "connection_id": conn_id2,
-  "presentation_request": {
-    "indy": {
-      "name": "Proof of Identity",
-      "version": "1.0",
-      "requested_attributes": {
-        "0_name_uuid": {
-          "name": "name",
-          "restrictions": [
-            {
-              "cred_def_id": session.get('cred_def_id')
-            }
-          ]
-        },
-        "0_date_uuid": {
-          "name": "mail",
-          "restrictions": [
-            {
-              "cred_def_id": session.get('cred_def_id')
-            }
-          ]
-        },
-        "0_degree_uuid": {
-          "name": "address",
-          "restrictions": [
-            {
-              "cred_def_id": session.get('cred_def_id')
-            }
-          ]
-        },
-        "0_self_attested_thing_uuid": {
-          "name": "self_attested_thing"
-        }
-      },
-      "requested_predicates": {
-        "0_age_GE_uuid": {
-          "name": "mobile_number",
-          "p_type": "<=",
-          "p_value": 1234567890,
-          "restrictions": [
-            {
-              "cred_def_id": session.get('cred_def_id')
-            }
-          ]
-        }
-      }
-    }
-  }
-}
+  "FABER_HOST"] + "/present-proof-2.0/send-request"
+  headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+  payload19 = input_payload
   r19 = requests.post(url19, data=json.dumps(payload19), headers=headers)
-  rjson19 = r19.json()['state']
-  return render_template('presetation_req.html',
-                         result=rjson19,
-                         login=("/login"))
+  rjson19 = json.loads(r19.text)
+
+  return render_template('send_presentation_req.html',
+   result=rjson19,
+   login=("/login"))
+
 
 @app.route('/viewpresentation')
 def viewpresentation():

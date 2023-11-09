@@ -1,17 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SSI Web App: API</title>
+<meta charset="UTF-8">
+<title>SSI Web App: API</title>
+<style>
+.container {
+  color: black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 80%;
+background-color: pink;
+}
+.container1{
+text-align:center;}
+.button {
+  background-color: pink;
+  color: black;
+  border: 2px solid pink;
+  height: 30px;
+
+}
+
+.button:hover {
+  text-decoration: none;
+     background-color: white;
+}
+.button1 {border-radius: 8px;}
+</style>
 </head>
 <body>
-  <h1>AADHAAR</h1>
-    <a href="javascript:window.history.go(-1)">Back</a> <!-- Displayed on top of a potentially large JSON response, so it will remain visible -->
-  <h2>Copy the below invitation and paste it in your Alice agent to receive the invitation </h2>
-  <h1>{{ result1 }} </h1>
-  <h2>OR</h2>
-  <h1>Scan below QR code image</h1>
-  <img src="{{ url_for('static', filename='images/displayQrInvite.png') }}"/>
+<div class = container>
+<img src="static/images/logo.png" width="50px",height="50px" >
+<h1>AADHAAR</h1>
+</div>
+<div class =container1>
+<button class="button button1"><a href="javascript:window.history.go(-1)">Back</a> <!-- Displayed on top of a potentially large JSON response, so it will remain visible --></button>
+<h2>Copy the below invitation and paste it in your Alice agent to receive the invitation </h2>
+<h1>{{ result1 }} </h1>
+<h2>OR</h2>
+<h1>Scan below QR code image</h1>
+<img src="{{ url_for('static', filename='images/displayQrInvite.png') }}"/>
+</div>
 </body>
 </html>
-

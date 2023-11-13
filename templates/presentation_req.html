@@ -1,18 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Bank Agent</title>
+<head>
+<title>Bank Agent</title>
+<style>
+.container {
+  color: black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 80%;
+background-color: #a7b6ff;
+}
+input[type="submit" i] {
+    appearance: auto;
+    user-select: none;
+    align-items: flex-start;
+    text-align: center;
+    cursor: default;
+    box-sizing: border-box;
+    background-color:#a7b6ff ;
+    color: buttontext;
+    white-space: pre;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: #a7b6ff;
+    border-image: initial;
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+</style>
 </head>
 <body>
-  <h1>BANK</h1>
-
-  <h4> cred_ex_id: {{ cred_ex_id }}</h4>
-  <h4> connection Id: {{ conn_id }}</h4>
-  
-   <form name="presentation_req" method = "post">
-  <label> Enter the payload with the above values for presentation request:  </label>
-  <input type="text" name="pres_req">
-  <input type="submit" value="Send Presentation Request">
-    </form>
+<div class = container>
+<img src="static/images/logo.png" width="50px",height="50px" >
+<h1>BANK</h1>
+</div>
+<div class = center>  
+<h4> cred_ex_id: {{ cred_ex_id }}</h4></div>
+<div class = center>  
+<h4> connection Id: {{ conn_id }}</h4></div>
+<div class = center>  
+<form name="presentation_req" method = "post">
+<label> Enter the payload with the above values for presentation request:  </label>
+<input type="text" name="request"></div>
+<br>
+<div class = center>
+<input type="submit" value="Send Presentation Request"></div>
+</form>
 </body>
 </html>

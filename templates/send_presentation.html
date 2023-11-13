@@ -1,34 +1,86 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Presentation Request</title>
+<head>
+<title>Presentation Request</title>
+<style>
+.container {
+  color: black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 80%;
+background-color: #4ca3ae;
+}
+.container1{
+text-align:center;}
+table, td {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+ 
+table.center {
+  margin-left: auto; 
+  margin-right: auto;
+}
+button {
+    appearance: auto;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color:#4ca3ae;
+    margin: 0em;
+    padding-block: 0px;
+    padding-inline: 15px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: #4ca3ae;
+    border-image: initial;
+border-radius: 8px;
+height: 40px;
+}
+ 
+ 
+</style>
 </head>
 <body>
-  <h1>ALICE</h1>
-  <h3>The following details has been sent to the Bank</h3>
-  <br>
-  <table border="1">
-    <tr>
-      <td>Name</td>
-      <td>{{ name }}</td>
-    </tr>
-    <tr>
-      <td>E-Mail</td>
-      <td>{{ mail }}</td>
-    </tr>
-    <tr>
-      <td>Contact</td>
-      <td>{{ mobile_number }}</td>
-    </tr>
-    <tr>
-      <td>Address</td>
-      <td>{{ address }}</td>
-    </tr>
-  </table>
-  <br>
-  <br>  
-  
+<div class = container>
+<img src="static/images/logo.png" width="50px",height="50px" >
+<h1> ALICE</h1>
+</div>
+<div class = container1>
+<h3>The following details has been sent to the Bank</h3>
+<br>
+<table class ="center">
+<tr>
+<td>Name</td>
+<td>{{ name }}</td>
+</tr>
+<tr>
+<td>E-Mail</td>
+<td>{{ mail }}</td>
+</tr>
+<tr>
+<td>Contact</td>
+<td>{{ mobile_number }}</td>
+</tr>
+<tr>
+<td>Address</td>
+<td>{{ address }}</td>
+</tr>
+</table>
+<br>
+<br>  
 
+ 
   <button onclick="window.location.href = '{{ login }}';">Go to main menu</button>
+</div>
 </body>
 </html>

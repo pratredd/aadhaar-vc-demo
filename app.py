@@ -274,7 +274,7 @@ def issuecredential():
               "schema_id": data12[0],
               "schema_issuer_did": data11['did'],
               "schema_name": "aadhaar schema",
-              "schema_version": "1.85.44"
+              "schema_version": "18.6.95"
           }
       },
       "trace": "false"
@@ -327,16 +327,15 @@ def presentation_req():
 
 @app.route('/presentation_req', methods=['POST'])
 def presentationreq():
-  input_payload = request.form['pres_req']
-  url19 = "http://" + app.config[
-  "FABER_HOST"] + "/present-proof-2.0/send-request"
+  input_payload = (request.form['request'])
+  url19 = "http://" + app.config["FABER_HOST"] + "/present-proof-2.0/send-request"
   headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-  payload19 = input_payload
+  payload19 = json.loads(input_payload)
   r19 = requests.post(url19, data=json.dumps(payload19), headers=headers)
   rjson19 = json.loads(r19.text)
 
   return render_template('send_presentation_req.html',
-   result=rjson19,
+   result=rjson19['state'],
    login=("/login"))
 
 

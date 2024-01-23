@@ -2,58 +2,81 @@
 <html>
 <head>
 <title>Send offer</title>
-
+ 
 <style>
+body {
+    background-color: #f2f2f2;
+    background-image: url("static/images/aadhaar_bg.jpg");
+    background-size: 1500px;
+    background-repeat: no-repeat;
+    background-position: 30% 5%;
+      }
 .container {
-  color: black;
+  background-image: url("static/images/a_header.jpg");
+  background-size: 1300px;
+  background-repeat: no-repeat;
+  background-position: 20% 30%;
+    color: black;
   font-family: "Times New Roman", Times, serif;
-  font-size: 80%;
+  font-size: 50%;
 background-color: pink;
+  display: flex;
 }
-.container1{
-text-align:center;}
-
+ 
   button {
-      appearance: auto;
-      text-rendering: auto;
-      color: buttontext;
-      letter-spacing: normal;
-      word-spacing: normal;
-      line-height: normal;
-      text-transform: none;
-      text-indent: 0px;
-      text-shadow: none;
-      display: inline-block;
-      text-align: center;
-      align-items: flex-start;
-      cursor: default;
-      box-sizing: border-box;
-      background-color: pink;
-      margin: 0em;
-      padding-block: 0px;
-      padding-inline: 15px;
-      border-width: 2px;
-      border-style: outset;
-      border-color: pink;
-      border-image: initial;
-  border-radius: 8px;
-  height: 40px;
-  }
+    background-color: #ea899a;
+    color: black;
+    border: 2px solid #ea899a;
+    height: 60px;
+    width: 300px;
+    line-height: 0px;
+    text-align: center;
+    margin-right: 30px;
+     font-size: 20px;
 
+  }
+  h1{ 
+  text-align: center;
+  font-size: 45px;
+  padding-left: 450px;}
+    img.a {
+      vertical-align: baseline;
+    }
+
+  h2{ 
+  text-align: center;
+  font-size: 35px;
+    }
+
+  .container1{
+  background-color: grey;
+  margin-block-start: 100px;
+    margin-left: 500px;
+  width: 300px;
+  padding: 50px;
+  border: 1px solid #ccc;
+    text-align: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.7);
+  }
+ 
 </style>
 </head>
 <body>
 <div class = container>
-<img src="static/images/logo.png" width="50px",height="50px" >
-<h1>AADHAAR</h1>
+<img class="a" src="static/images/logo.png" width="100px" height="100px"> <h1>AADHAAR</h1>
 </div>
 <div class = container1>
-<h1>Credentials</h1>
-<h3>State: {{ result }}</h3>
-<h2>The Aadhar details has been issued </h2>
+<br>
+<br><br>
+<h2>Credentials</h2>
+<br>
+<h2>State: {{ result }}</h2>
+<br>
+<h2>The Aadhar details has been issued </h2><br><br>
 <!-- <h3> Cred_ex_id: {{ result2 }}</h3> -->
-
+ 
   <button onclick="window.location.href = '{{ login }}';">Go to main menu</button>
 </div>
 </body>
-</html>
+</html

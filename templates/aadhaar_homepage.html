@@ -5,89 +5,117 @@
 <title>SSI Web App: Login</title>
 <style>
   body {
-    background-color: white
+    background-color: #f2f2f2;
+    background-image: url("static/images/aadhaar_bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center above;
       }
 .container {
-  color: black;
+  background-image: url("static/images/a_header.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 20% 30%;
+    color: black;
   font-family: "Times New Roman", Times, serif;
-  font-size: 80%;
+  font-size: 50%;
 background-color: pink;
+  display: flex;
 }
 .button {
-  background-color: pink;
+  background-color: #ea899a;
   color: black;
-  border: 2px solid pink;
+  border: 2px solid #ea899a;
   height: 50px;
-
+ 
 }
-
+ 
 .button:hover {
   text-decoration: none;
      background-color: white;
 }
 .button2 {
-  background-color: pink;
+  background-color: #ea899a;
   color: black;
-  border: 2px solid pink;
+  border: 2px solid #ea899a;
   height: 50px;
-
+ 
 }
-
+ 
 .button2:hover {
   text-decoration: none;
      background-color: white;
 }
 .button3 {
-  background-color: pink;
+  background-color: #ea899a;
   color: black;
-  border: 2px solid pink;
+  border: 2px solid #ea899a;
   height: 50px;
-
+ 
 }
-
+ 
 .button3:hover {
   text-decoration: none;
      background-color: white;
 }
 .button4 {
-  background-color: pink;
+  background-color: #ea899a;
   color: black;
-  border: 2px solid pink;
+  border: 2px solid #ea899a;
   height: 50px;
-
+ 
 }
-
+ 
 .button4:hover {
   text-decoration: none;
      background-color: white;
 }
-
-.button1 {border-radius: 8px;}
+ 
+.button1 {border-radius: 8px;
+         height: 60px;
+         width: 300px;
+         }
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .container1{
-background-color: white;}
-
+  margin-block-start: 50px;
+    margin-left: 500px;
+  width: 300px;
+  padding: 50px;
+  border: 1px solid #ccc;
+    text-align: center;
+  background: rgba(169, 169, 169, 0.5); /* Gray color with transparency */
+  backdrop-filter: blur(10px); /* Adjust the blur value as needed */
+  border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+  width: 300px; /* Set a fixed width for the container */
+}
+ 
 h4{
 color:black;
 font-family: "Times New Roman", Times, serif;
-font-size: 15px;
+font-size: 25px;
+  line-height: 0px;
 }
 h1{ 
-text-align:"center";}
-
-  </style>
+text-align: center;
+font-size: 45px;
+padding-left: 400px;}
+  img.a {
+    vertical-align: baseline;
+  }
+</style>
 </head>
 <body>
 <div class = container>
-<img src="static/images/logo.png" width="50px",height="50px" >
-<h1>AADHAR HOMEPAGE</h1>
+<img class="a" src="static/images/logo.png" width="100px" height="100px"> <h1>AADHAR AGENT</h1>
 </div>
 <div class = container1>
-<br>  
+<br> 
+<br>
+<br><br><br><br>
 <!-- <div class = center>    
 <ul><button class="button button1"><a href='{{ publishschema }}'><h4>Publish Schema</h4></a></button></ul></div> -->
 <div class = center>   
@@ -96,8 +124,8 @@ text-align:"center";}
 <ul><button class="button3 button1"><a href='{{ acceptrequest }}'><h4>Accept Request</h4></a></button></ul></div>
 <div class = center>
 <ul><button class="button4 button1"><a href='{{ issuecredential }}'><h4>Issue Credential</h4></a></button></ul></div> -->
-  <div class = center>
-  <ul><button class="button4 button1"><a href='{{ sendoffer }}'><h4>Send Offer</h4></a></button></ul></div>
-
+<div class = center>
+<ul><button class="button4 button1"><a href='{{ sendoffer }}'><h4>Send Offer</h4></a></button></ul></div>
+ 
 </body>
 </html>

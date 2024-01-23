@@ -111,7 +111,7 @@ def bank_agent():
     return render_template('bank_homepage.html',
                           presentreq="/presentation_req",
                           viewpresentation="/viewpresentation")
-  
+
 @app.route('/publish_schema')
 def post_schema_api():
   payload = {
@@ -163,7 +163,7 @@ def send_offer():
   session['connectionid'] = first['connection_id']
   conn_id = session.get('connectionid')
   print("conn_id:", conn_id)
-  
+
   #credential definition Id
   cred_url = "http://" + app.config[
       "FABER_HOST"] + "/credential-definitions/created"
@@ -215,11 +215,11 @@ def send_offer():
   offer_data = offer_r.json()['state']
   print(offer_data)
   return render_template('send_offer.html', result=offer_data, login=("/login"))
-  
+
 # @app.route('/receive_invitation')
 # def receive_inviteform():
 #   return render_template('receive_invitation.html')
-    
+
 # @app.route('/receive_invitation', methods=['POST'])
 # def receiveinvitation():
 #   #Alice recieves the invitation
@@ -412,11 +412,19 @@ def viewpresentation():
   "FABER_HOST"] + "/present-proof/records"
   headers20 = {'Content-type': 'application/json'}
   r20 = requests.get(url20, headers=headers20)
+  #-------------------------------------------#
+  # state = r20.json()['results'][1]['state']
+  # # r_mobile = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']
+  # r_name = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
+  # r_address = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_address_uuid']['raw']
+  # r_mail = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  #-----------------------------------------------#
   state = r20.json()['results'][0]['state']
-  r_mobile = r20.json()['results'][0]['presentation']['proof']['proofs'][0]['primary_proof']['ge_proofs'][0]['predicate']['value']
+  # r_mobile = r20.json()['results'][0]['presentation']['proof']['proofs'][0]['primary_proof']['ge_proofs'][0]['predicate']['value']
   r_name = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
   r_address = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_address_uuid']['raw']
   r_mail = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  #-----------------------------------------------#
 #   pres_ex_id = r20.json()['results'][0]['pres_ex_id']
 # #view presentation with pres_ex_id
 #   url21 = "http://" + app.config[
@@ -426,14 +434,13 @@ def viewpresentation():
 #   r_name = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['name']
 
 #   r_phone = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['mobile_number']
-  
+
 #   r_address = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['address']
-  
+
 #   r_mail = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['mail']
 #   state = r21.json()['state']
   return render_template('view_presetation.html',
                          result=state, name=r_name,
-                         mobile=r_mobile,
                          address=r_address,
                          mail=r_mail,
                          login=("/login"),
@@ -449,12 +456,12 @@ def createaccount():
 #   headers = {'Accept': 'text/plain'}
 #   r = requests.get(url, headers=headers)
 #   attributes = r.json()['results'][0]['attrs']
-  
+
 #   return render_template('send_presentation.html', name = attributes.get("name"),
 #      mail = attributes.get("mail"),
 #     mobile_number = attributes.get("mobile_number"),
 #     address = attributes.get("address"), login=("/login"))
 
-  
+
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

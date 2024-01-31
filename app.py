@@ -45,7 +45,8 @@ def login():
       ),
       aadhaar=("/aadhaaragent"),
       alice=("/aliceagent"),
-      bank=("/bankagent"))
+      bank=("/bankagent"),
+      hotel=("/hotelagent"))
 
 
 @app.route(app_config.REDIRECT_PATH)
@@ -491,6 +492,90 @@ def createaccount():
 #     mobile_number = attributes.get("mobile_number"),
 #     address = attributes.get("address"), login=("/login"))
 
+@app.route('/hotelagent')
+def hotel_agent():
+    return render_template('hotel_homepage.html',
+                          presentreq="/hotelpresentation_req",
+                          viewpresentation="/hotelviewpresentation", hotelinvite="/hotel_create_invite")
 
+
+@app.route('/hotel_create_invite')
+def hotel_create_invitation():
+  url1 = "http://" + app.config["ALICE_HOST"] + "/connections/create-invitation"
+  headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+  payload1 = {}
+  r1 = requests.post(url1, data=json.dumps(payload1), headers=headers)
+
+  rjson1 = json.loads(r1.text)
+  invitation = json.dumps(rjson1['invitation'])
+  #retrieve the connection id from response
+  rjson1['connection_id']
+  print(rjson1)
+  print(rjson1['invitation_url'])
+  #print(r.text)
+  img = qrcode.make(rjson1['invitation_url'])
+  img.save("static/images/displayQrInvite.png")
+  print(img)
+
+  return render_template('hotel_invite.html', result1=invitation.replace("'", "\""))
+
+
+@app.route('/hotelpresentation_req')
+def hotel_presentation_req():
+  # cred_ex_id = session.get('cred_def_id')
+
+  #connection_Id  
+  url = "http://" + app.config["ALICE_HOST"] + "/connections?state=active"
+  headers = {'Accept': 'application/json'}
+  r4 = requests.get(url, headers=headers)
+  rjson = json.loads(r4.text)['results']
+  first = rjson[0]
+  session['connectionid'] = first['connection_id']
+  conn_id = session.get('connectionid')
+
+  # conn_id2 = session.get('connectionid')
+  return render_template('hotel_presentation_req.html',  
+                         conn_id=conn_id)
+
+@app.route('/hotelpresentation_req', methods=['POST'])
+def hotel_presentationreq():
+  input_payload = (request.form['request'])
+  url19 = "http://" + app.config["ALICE_HOST"] + "/present-proof/send-request"
+  headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+  payload19 = json.loads(input_payload)
+  r19 = requests.post(url19, data=json.dumps(payload19), headers=headers)
+  rjson19 = json.loads(r19.text)['state']
+
+  return render_template('hotel_send_presentation_req.html',
+   result=rjson19,
+   login=("/login"))
+
+
+@app.route('/hotelviewpresentation')
+def hotel_viewpresentation():
+  url20 = "http://" + app.config[
+  "ALICE_HOST"] + "/present-proof/records"
+  headers20 = {'Content-type': 'application/json'}
+  r20 = requests.get(url20, headers=headers20)
+  #-------------------------------------------#
+  # state = r20.json()['results'][1]['state']
+  # r_name = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
+  # r_mail = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  #-----------------------------------------------#
+  state = r20.json()['results'][0]['state']
+  r_name = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
+  r_mail = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  #-----------------------------------------------#
+
+  return render_template('hotel_view_presentation.html',
+                         result=state, name=r_name,
+                         mail=r_mail,
+                         login=("/login"),
+                         verifyguest=("/verifyguest"))
+
+@app.route("/verifyguest")
+def verifyguest():
+  return render_template("guest_verified.html")
+  
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

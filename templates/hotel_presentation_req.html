@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bank Agent</title>
+<style>
+.container {
+    display: flex;
+    color: black;
+    font-family: Georgia, serif;
+    font-size: 90%;
+    text-align: center; 
+     padding: 20px;
+    background: rgba(255, 255, 255, 0.7); /* Adjust the alpha (fourth) value for transparency */
+    border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+    backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */
+  }
+  body{
+  background-image: url('static/images/bank_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f0f0f0;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+
+  }
+
+  .container1{
+  background-color: white;
+  margin-block-start: 50px;
+    margin-left: 450px;
+  width: 800px;
+  height: 100px;
+  padding: 20px;
+  border: 1px solid #ccc;
+    text-align: center;
+  background: rgba(255, 255, 255, 0.5); /* Adjust the alpha (fourth) value for transparency */
+  border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+  backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */}
+
+  .container2{
+  background-color: white;
+  margin-block-start: 50px;
+    margin-left: 410px;
+  width: 800px;
+  padding: 50px;
+  border: 1px solid #ccc;
+    text-align: center;
+  background: rgba(255, 255, 255, 0.8); /* Adjust the alpha (fourth) value for transparency */
+  border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+  backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */}
+
+input[type="submit" i] {
+    appearance: auto;
+    user-select: none;
+    align-items: flex-start;
+    text-align: center;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: #191970;
+    color: white;
+    white-space: pre;
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: #191970;
+    border-image: initial;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+  h4{
+  color: black;
+  font-family: Georgia, serif;
+  font-size: 25px;
+  }
+  h1{ 
+  text-align:"center";
+  font-size: 50px;
+  padding-left: 500px;}
+
+  img{
+    width: 100px;
+    height: 100px;
+    margin-left: 50px;
+  }
+  label{
+    font-size: 25px;
+    font-family: Georgia, serif;
+  }
+  input{
+    font-size: 25px;
+    font-family: Georgia, serif;
+    width: 800px; 
+    height: 100px; 
+    padding: 10px; 
+    box-sizing: border-box; 
+  }
+  
+</style>
+</head>
+  
+<body>
+<div class = container>
+<img src="static/images/bank_logo.png" width="50px",height="50px" >
+<h1>BANK</h1>
+</div>
+  <div class = container1>
+<!-- <div class = center>  
+<h4> cred_ex_id: {{ cred_ex_id }}</h4></div> -->
+<div class = center>  
+<h4> connection Id: {{ conn_id }}</h4></div></div>
+    <div class = container2>
+<div class = center>  
+<form name="presentation_req" method = "post">
+<label><b> Enter the payload with the given Id for presentation request: <b></label>
+<input type="text" name="request"></div>
+<br>
+<div class = center>
+<input type="submit" value="Send Presentation Request"></div>
+</form>
+</body>
+</html>

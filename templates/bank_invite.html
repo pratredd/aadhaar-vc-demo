@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SSI Web App: API</title>
+<style>
+body {
+  background-color: #f2f2f2;
+  background-image: url("static/images/bank_bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center above;
+    }
+  .container {
+    display: flex;
+    color: black;
+    font-family: Georgia, serif;
+    font-size: 90%;
+    text-align: center; 
+     padding: 20px;
+    background: rgba(255, 255, 255, 0.7); /* Adjust the alpha (fourth) value for transparency */
+    border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+    backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */
+  }
+  .container1{
+  background-color: white;
+  margin-block-start: 50px;
+    margin-left: 500px;
+  width: 300px;
+  padding: 50px;
+  border: 1px solid #ccc;
+    text-align: center;
+  background: rgba(255, 255, 255, 0.5); /* Adjust the alpha (fourth) value for transparency */
+  border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+  backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */}
+  
+.button {
+  background-color: white;
+  color: black;
+  border: 2px solid white;
+  height: 30px;
+  width: 100px;
+}
+.button:hover {
+  text-decoration: none;
+     background-color: white;
+}
+.button1 {border-radius: 8px;}
+h1{ 
+text-align: center;
+font-size: 45px;
+padding-left: 400px;}
+  }
+  h2{
+  color:black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 50px;
+    line-height: 0px;
+  }
+</style>
+</head>
+<body>
+<div class = container>
+<img class="a" src="static/images/bank_logo.png" width="100px" height="100px"> <h1>BANK</h1>
+ 
+</div>
+<br><br>
+<div class =container1>
+<button class="button button1"><a href="javascript:window.history.go(-1)">Back</a> <!-- Displayed on top of a potentially large JSON response, so it will remain visible --></button><br><br>
+<!--<h3>Copy the below invitation and paste it in your Alice agent to receive the invitation </h3>
+<h2>{{ result1 }} </h2>
+<h3>OR</h3> -->
+<h2><span style="background-color: white;">Scan the below QR code</h2>
+<br>
+<br>
+<br>
+<img src="static/images/displayQrInvite.png" width="300px" height="300px">
+ 
+</div>
+</body>
+</html>

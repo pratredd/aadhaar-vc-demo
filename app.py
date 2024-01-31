@@ -110,7 +110,7 @@ def aadhar_agent():
 def bank_agent():
     return render_template('bank_homepage.html',
                           presentreq="/presentation_req",
-                          viewpresentation="/viewpresentation")
+                          viewpresentation="/viewpresentation", bankinvite="/bank_create_invite")
 
 @app.route('/publish_schema')
 def post_schema_api():
@@ -382,20 +382,49 @@ def send_offer():
 #     mobile_number = attributes.get("mobile_number"),
 #     address = attributes.get("address"), login=("/login"))
 
+@app.route('/bank_create_invite')
+def bank_create_invitation():
+  url1 = "http://" + app.config["ALICE_HOST"] + "/connections/create-invitation"
+  headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+  payload1 = {}
+  r1 = requests.post(url1, data=json.dumps(payload1), headers=headers)
+
+  rjson1 = json.loads(r1.text)
+  invitation = json.dumps(rjson1['invitation'])
+  #retrieve the connection id from response
+  rjson1['connection_id']
+  print(rjson1)
+  print(rjson1['invitation_url'])
+  #print(r.text)
+  img = qrcode.make(rjson1['invitation_url'])
+  img.save("static/images/displayQrInvite.png")
+  print(img)
+
+  return render_template('bank_invite.html', result1=invitation.replace("'", "\""))
 
 
 
 @app.route('/presentation_req')
 def presentation_req():
-  cred_ex_id = session.get('cred_def_id')
-  conn_id2 = session.get('connectionid')
-  return render_template('presentation_req.html', cred_ex_id=cred_ex_id, 
-                         conn_id=conn_id2)
+  # cred_ex_id = session.get('cred_def_id')
+
+  #connection_Id  
+  url = "http://" + app.config["ALICE_HOST"] + "/connections?state=active"
+  headers = {'Accept': 'application/json'}
+  r4 = requests.get(url, headers=headers)
+  rjson = json.loads(r4.text)['results']
+  first = rjson[0]
+  session['connectionid'] = first['connection_id']
+  conn_id = session.get('connectionid')
+
+  # conn_id2 = session.get('connectionid')
+  return render_template('presentation_req.html',  
+                         conn_id=conn_id)
 
 @app.route('/presentation_req', methods=['POST'])
 def presentationreq():
   input_payload = (request.form['request'])
-  url19 = "http://" + app.config["FABER_HOST"] + "/present-proof/send-request"
+  url19 = "http://" + app.config["ALICE_HOST"] + "/present-proof/send-request"
   headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
   payload19 = json.loads(input_payload)
   r19 = requests.post(url19, data=json.dumps(payload19), headers=headers)
@@ -409,7 +438,7 @@ def presentationreq():
 @app.route('/viewpresentation')
 def viewpresentation():
   url20 = "http://" + app.config[
-  "FABER_HOST"] + "/present-proof/records"
+  "ALICE_HOST"] + "/present-proof/records"
   headers20 = {'Content-type': 'application/json'}
   r20 = requests.get(url20, headers=headers20)
   #-------------------------------------------#

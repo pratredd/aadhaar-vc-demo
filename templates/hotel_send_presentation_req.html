@@ -3,27 +3,27 @@
 <head>
 <title>Presentation Request</title>
 <style>
-.container {
-  display: flex;
-  color: black;
-  font-family: Georgia, serif;
-  font-size: 90%;
-  text-align: center; 
-   padding: 20px;
-  background: rgba(255, 255, 255, 0.7); /* Adjust the alpha (fourth) value for transparency */
-  border-radius: 10px; /* Optional: Add border-radius for rounded corners */
-  backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */
-}
+  .container {
+    background-image: url("static/images/hotel4.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 10% 10%;
+      color: black;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 60%;
+  background-color: white;
+    display: flex;
+  }
   body{
-  background-image: url('static/images/bank_bg.jpg');
+  background-image: url('static/images/hotel2.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-color: #f0f0f0;
-    height: 100vh;
+    
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    
     margin: 0;
 
   }
@@ -40,7 +40,8 @@
 
   .button2:hover {
     text-decoration: none;
-       background-color: black;
+       background-color: #8dad7b;
+    border: 2px solid #8dad7b;
   }
 
 
@@ -48,7 +49,7 @@
   .container1{
   background-color: white;
   margin-block-start: 100px;
-    margin-left: 600px;
+    margin-left: 350px;
   width: 500px;
   padding: 50px;
   border: 1px solid #ccc;
@@ -65,7 +66,10 @@
   h1{ 
   text-align:"center";
   font-size: 50px;
-  padding-left: 450px;}
+  padding-left: 350px;
+  color:#191970;
+  font-family: ;
+  text-shadow: 2px 2px;}
   h2{
   color:black;
   font-family: Georgia, serif;
@@ -85,12 +89,12 @@
 </head>
 <body>
 <div class = container>
-<img src="static/images/bank_logo.png" width="50px",height="50px" >
-<h1> BANK</h1>
+
+<h1> ACME Group of Hotels</h1>
 </div>
   <div class = container1>
 <div class = center>
-<h2><span style="background-color: white;">To verify the guest, a presentation request has been sent to the wallet</h2></div>
+<h2><span style="background-color:;">To verify the guest, a presentation request has been sent to the wallet</h2></div>
 <div class = center>
 
   <h2><span style="background-color: white;">State: {{ result }}</h2></div>

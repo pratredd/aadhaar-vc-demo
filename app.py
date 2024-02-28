@@ -443,17 +443,23 @@ def viewpresentation():
   headers20 = {'Content-type': 'application/json'}
   r20 = requests.get(url20, headers=headers20)
   #-------------------------------------------#
-  # state = r20.json()['results'][1]['state']
-  # # r_mobile = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']
-  # r_name = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
-  # r_address = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_address_uuid']['raw']
-  # r_mail = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  state = r20.json()['results'][1]['state']
+  # r_mobile = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']
+  r_name = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
+  r_address = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_address_uuid']['raw']
+  r_mail = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
   #-----------------------------------------------#
-  state = r20.json()['results'][0]['state']
-  # r_mobile = r20.json()['results'][0]['presentation']['proof']['proofs'][0]['primary_proof']['ge_proofs'][0]['predicate']['value']
-  r_name = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
-  r_address = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_address_uuid']['raw']
-  r_mail = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  # state = r20.json()['results'][0]['state']
+  # # r_mobile = r20.json()['results'][0]['presentation']['proof']['proofs'][0]['primary_proof']['ge_proofs'][0]['predicate']['value']
+  # r_name = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
+  # r_address = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_address_uuid']['raw']
+  # r_mail = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  #----------------------------------------------#
+  # state = r20.json()['results'][0]['state']
+  # # r_mobile = r20.json()['results'][0]['presentation']['proof']['proofs'][0]['primary_proof']['ge_proofs'][0]['predicate']['value']
+  # r_name = r20.json()['results'][1]
+  # r_address = r20.json()['results']
+  # r_mail = r20.json()['results']
   #-----------------------------------------------#
 #   pres_ex_id = r20.json()['results'][0]['pres_ex_id']
 # #view presentation with pres_ex_id

@@ -10,13 +10,14 @@
   font-size: 90%;
   text-align: center; 
    padding: 20px;
-  background: rgba(255, 255, 255, 0.7); /* Adjust the alpha (fourth) value for transparency */
-  border-radius: 10px; /* Optional: Add border-radius for rounded corners */
-  backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */
+  /* background: rgba(255, 255, 255, 0.2); /* Adjust the alpha (fourth) value for transparency */
+  /* border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+  /* backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */ */ */ */
 }
 body{
-background-image: url('static/images/bank_bg.jpg');
+background-image: url('static/images/bank2.jpg');
 background-size: cover;
+  transform: scale(1.0);
 background-position: center;
 background-repeat: no-repeat;
 background-color: #f0f0f0;
@@ -28,9 +29,9 @@ background-color: #f0f0f0;
 
 }
 .button {
-  background-color: #191970;
+  background-color: #f37e20;
   color: black;
-  border: 2px solid #191970;
+  border: 2px solid #f37e20;
   height: 60px;
   width: 300px;
   line-height: 0px;
@@ -40,12 +41,12 @@ background-color: #f0f0f0;
  
 .button:hover {
   text-decoration: none;
-     background-color: black;
+     background-color: grey;
 }
 .button2 {
-  background-color: #191970;
+  background-color: #f37e20;
   color: black;
-  border: 2px solid #191970;
+  border: 2px solid #f37e20;
   height: 60px;
   width: 300px;
   line-height: 0px;
@@ -55,7 +56,7 @@ background-color: #f0f0f0;
  
 .button2:hover {
   text-decoration: none;
-     background-color: black;
+     background-color: grey;
 }
  
  
@@ -67,27 +68,31 @@ background-color: #f0f0f0;
 }
 .container1{
 background-color: white;
-margin-block-start: 100px;
-  margin-left: 600px;
-width: 300px;
+  font-family: Muli, sans-serif;
+  font-size: 30px;
+margin-block-start: 250px;
+  margin-left: 1000px;
+width: 600px;
+  height: 500px;
 padding: 50px;
-border: 1px solid #ccc;
+/* border: 1px solid #ccc; */
   text-align: center;
-background: rgba(255, 255, 255, 0.5); /* Adjust the alpha (fourth) value for transparency */
+background: rgba(255, 255, 255, 0.2); /* Adjust the alpha (fourth) value for transparency */
 border-radius: 10px; /* Optional: Add border-radius for rounded corners */
 backdrop-filter: blur(10px); /* Adjust the blur value for the glass effect */}
   
  
 h4{
 color:white;
-font-family: Georgia, serif;
+font-family: Muli, sans-serif;
 font-size: 25px;
 }
 
 h1{ 
 text-align:"center";
-font-size: 50px;
-padding-left: 400px;}
+font-size: 70px;
+padding-left: 350px;
+color:white;}
 
 img{
   width: 100px;
@@ -99,11 +104,12 @@ img{
 </head>
 <body>
 <div class = container>
-<img src="static/images/bank_logo.png">
-<h1 >BANK HOMEPAGE </h1>
+<!-- <img src="static/images/bank_logo.png"> -->
+<!-- <h1 >PAYMENTS BANK </h1> -->
 </div>
 <div class = container1>
-<br>  
+  <h2>Mobile Banking</h2>
+  <br>
 <div class = center>  
   <ul><button class="button button1"><a href='{{ bankinvite }}'><h4>Create Invitation</h4></a></button></ul></div>
   <div class = center> 

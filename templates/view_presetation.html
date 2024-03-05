@@ -52,7 +52,7 @@
   background-color: white;
   margin-block-start: 80px;
     margin-left: 750px;
-  width: 400px;
+  width: 450px;
   padding: 50px;
   border: 1px solid #ccc;
     text-align: center;
@@ -65,7 +65,7 @@ table.center 1{
   margin-right: auto;
 }
 table, td {
-  border: 2px solid black;
+  border: none;
   border-collapse: collapse;
 }
   h1{ 
@@ -95,10 +95,14 @@ table, td {
   font-size: 20px;
   }
   td{
-    color:black;
+    color:#595959;
     font-family: Georgia, serif;
     font-size: 30px;
+    border: none;
+    text-align: left;
+    padding: 8px;
   }
+
 </style>
 </head>
 <body>
@@ -116,11 +120,11 @@ table, td {
 </tr>
 <table class ="center1">
 <tr>
-<td>Name</td>
+<td><b>Name</td>
 <td>{{ name }}</td>
 </tr>
 <tr>
-<td>E-Mail</td>
+<td><b>E-Mail</td>
 <td>{{ mail }}</td>
 </tr>
 <!-- <tr>
@@ -128,7 +132,7 @@ table, td {
 <td>{{ mobile }}</td>
 </tr> -->
 <tr>
-<td>Address</td>
+<td><b>Address</td>
 <td>{{ address }}</td>
 </tr>
 </table>

@@ -1,9 +1,9 @@
 import json
-
+import base64
 import identity.web
 import qrcode
 import requests
-from flask import Flask, redirect, render_template, request, session, url_for,jsonify
+from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 from datetime import datetime
 
 import app_config
@@ -43,11 +43,41 @@ def login():
               "auth_response", _external=True
           ),  # Optional. If present, this absolute URL must match your app's redirect_uri registered in Azure Portal
       ),
-      aadhaar=("/aadhaaragent"),
+      aadhaar=("/identityrepublic"),
       alice=("/aliceagent"),
       bank=("/bankagent"),
       hotel=("/hotelagent"))
 
+@app.route("/opencam")
+def opencam():
+  return render_template("open_cam.html")
+
+@app.route("/identityrepublic")
+def identityrepublic():
+  # Generate QR code for the URL of the HTML file
+  html_file_path = 'templates/open_cam.html'  # Adjust the path as needed
+  url = 'https://ba8c173a-2eaa-4481-b6c3-96e42e3a2c87-00-2mrtth7y3p3hb.sisko.replit.dev/opencam'
+  qr = qrcode.make(url)
+  # Save the QR code image to a file
+  qr_path = 'static/qrcode.png'
+  qr.save("static/images/displayQrInvite.png")
+
+  # img = qrcode.make(url)
+  # img.save("static/images/displayQrInvite.png")
+  # print(img)
+  
+  return render_template("aadhaar_index.html")
+
+@app.route('/upload', methods=['POST'])
+def upload():
+   if 'image' in request.files:
+       image = request.files['image']
+       # Process the image file here (e.g., save it to a folder, perform some operations)
+       image_data = image.read()
+       # Example: Encode image data to base64
+       encoded_image = base64.b64encode(image_data).decode('utf-8')
+       return f'Successfully uploaded image. Base64 encoded image data: {encoded_image}'
+   return 'No image received'
 
 @app.route(app_config.REDIRECT_PATH)
 def auth_response():
@@ -94,12 +124,13 @@ def call_downstream_api():
 
 @app.route('/aadhaaragent')
 def aadhar_agent():
-  return render_template('aadhaar_homepage.html',
+  return render_template('aadhaar_index.html',
                          createinvite="/create_invite",
                          publishschema="/publish_schema",
                          acceptrequest="/accept_request",
                          issuecredential="/issue_credentials",
-                        sendoffer="/send_offer")
+                         sendoffer="/send_offer")
+
 
 # @app.route('/aliceagent')
 # def alice_agent():
@@ -107,11 +138,14 @@ def aadhar_agent():
 #                          receiveinvite="/receive_invitation", viewcredential="/view_credential",
 # sendpresentation="/sendpresentation")
 
+
 @app.route('/bankagent')
 def bank_agent():
-    return render_template('bank_homepage.html',
-                          presentreq="/presentation_req",
-                          viewpresentation="/viewpresentation", bankinvite="/bank_create_invite")
+  return render_template('bank_homepage.html',
+                         presentreq="/presentation_req",
+                         viewpresentation="/viewpresentation",
+                         bankinvite="/bank_create_invite")
+
 
 @app.route('/publish_schema')
 def post_schema_api():
@@ -153,9 +187,10 @@ def create_invitation():
 
   return render_template('invite.html', result1=invitation.replace("'", "\""))
 
+
 @app.route('/send_offer')
 def send_offer():
-  #connection_Id  
+  #connection_Id
   url = "http://" + app.config["FABER_HOST"] + "/connections?state=active"
   headers = {'Accept': 'application/json'}
   r4 = requests.get(url, headers=headers)
@@ -174,48 +209,47 @@ def send_offer():
   print("cred_def_id:", cred_def_id)
 
   #sending offer
-  offer_url = "http://" + app.config["FABER_HOST"] + "/issue-credential/send-offer"
+  offer_url = "http://" + app.config[
+      "FABER_HOST"] + "/issue-credential/send-offer"
   offer_headers = {'Content-type': 'application/json'}
   offer_payload = {
-    "auto_issue": "true",
-    "auto_remove": "true",
-    "comment": "string",
-    "connection_id": conn_id,
-    "cred_def_id": cred_def_id,
-    "credential_preview": {
-      "@type": "issue-credential/1.0/credential-preview",
-      "attributes": [
-                  {
-                      "name": "name",
-                      "value": "Alice Smith"
-                  },
-                  {
-                      "name": "address",
-                      "value": "123 Main Street, Cambridge"
-                  },
-                  {
-                      "name": "mail",
-                      "value": "alice.smith@email.com"
-                  },
-                  {
-                      "name": "mobile",
-                      "value": "123456789"
-                  },
-                  {
-                      "name": "birthdate",
-                      "value": "1998-02-05"
-                  }
-              ]
-    },
-    "trace": "true"
+      "auto_issue": "true",
+      "auto_remove": "true",
+      "comment": "string",
+      "connection_id": conn_id,
+      "cred_def_id": cred_def_id,
+      "credential_preview": {
+          "@type":
+          "issue-credential/1.0/credential-preview",
+          "attributes": [{
+              "name": "name",
+              "value": "Alice Smith"
+          }, {
+              "name": "address",
+              "value": "123 Main Street, Cambridge"
+          }, {
+              "name": "mail",
+              "value": "alice.smith@email.com"
+          }, {
+              "name": "mobile",
+              "value": "123456789"
+          }, {
+              "name": "birthdate",
+              "value": "1998-02-05"
+          }]
+      },
+      "trace": "true"
   }
 
   offer_r = requests.post(offer_url,
-                        data=json.dumps(offer_payload), 
+                          data=json.dumps(offer_payload),
                           headers=offer_headers)
   offer_data = offer_r.json()['state']
   print(offer_data)
-  return render_template('send_offer.html', result=offer_data, login=("/login"))
+  return render_template('send_offer.html',
+                         result=offer_data,
+                         login=("/login"))
+
 
 # @app.route('/receive_invitation')
 # def receive_inviteform():
@@ -238,7 +272,6 @@ def send_offer():
 #                          result2=rjson2['connection_id'],
 #                          accept="/acceptinvitation")
 
-
 # @app.route('/acceptinvitation')
 # def acceptinvitation():
 #   conn_id = session.get('connectionid')
@@ -251,7 +284,6 @@ def send_offer():
 #   return render_template('request_sent.html',
 #                          result3=rjson3['state'],
 #                          login=("/login"))
-
 
 # @app.route('/accept_request')
 # def getacceptrequest():
@@ -268,7 +300,6 @@ def send_offer():
 #                          accepted="/request_accepted",
 #                         login=("/login"))
 
-
 # @app.route('/request_accepted')
 # def requestaccepted():
 #   conn_id2 = session.get('connectionid_req')
@@ -281,7 +312,6 @@ def send_offer():
 #   return render_template('request_accepted.html',
 #                          result5=rjson5['state'],
 #                          login=("/login"))
-
 
 # @app.route('/issue_credentials')
 # def issuecredential():
@@ -383,6 +413,7 @@ def send_offer():
 #     mobile_number = attributes.get("mobile_number"),
 #     address = attributes.get("address"), login=("/login"))
 
+
 @app.route('/bank_create_invite')
 def bank_create_invitation():
   url1 = "http://" + app.config["ALICE_HOST"] + "/connections/create-invitation"
@@ -401,15 +432,15 @@ def bank_create_invitation():
   img.save("static/images/displayQrInvite.png")
   print(img)
 
-  return render_template('bank_invite.html', result1=invitation.replace("'", "\""))
-
+  return render_template('bank_invite.html',
+                         result1=invitation.replace("'", "\""))
 
 
 @app.route('/presentation_req')
 def presentation_req():
   # cred_ex_id = session.get('cred_def_id')
 
-  #connection_Id  
+  #connection_Id
   url = "http://" + app.config["ALICE_HOST"] + "/connections?state=active"
   headers = {'Accept': 'application/json'}
   r4 = requests.get(url, headers=headers)
@@ -419,8 +450,8 @@ def presentation_req():
   conn_id = session.get('connectionid')
 
   # conn_id2 = session.get('connectionid')
-  return render_template('presentation_req.html',  
-                         conn_id=conn_id)
+  return render_template('presentation_req.html', conn_id=conn_id)
+
 
 @app.route('/presentation_req', methods=['POST'])
 def presentationreq():
@@ -432,14 +463,13 @@ def presentationreq():
   rjson19 = json.loads(r19.text)['state']
 
   return render_template('send_presentation_req.html',
-   result=rjson19,
-   login=("/login"))
+                         result=rjson19,
+                         login=("/login"))
 
 
 @app.route('/viewpresentation')
 def viewpresentation():
-  url20 = "http://" + app.config[
-  "ALICE_HOST"] + "/present-proof/records"
+  url20 = "http://" + app.config["ALICE_HOST"] + "/present-proof/records"
   headers20 = {'Content-type': 'application/json'}
   r20 = requests.get(url20, headers=headers20)
   #-------------------------------------------#
@@ -451,9 +481,12 @@ def viewpresentation():
   #-----------------------------------------------#
   state = r20.json()['results'][0]['state']
   # r_mobile = r20.json()['results'][0]['presentation']['proof']['proofs'][0]['primary_proof']['ge_proofs'][0]['predicate']['value']
-  r_name = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
-  r_address = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_address_uuid']['raw']
-  r_mail = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  r_name = r20.json()['results'][0]['presentation']['requested_proof'][
+      'revealed_attrs']['0_name_uuid']['raw']
+  r_address = r20.json()['results'][0]['presentation']['requested_proof'][
+      'revealed_attrs']['0_address_uuid']['raw']
+  r_mail = r20.json()['results'][0]['presentation']['requested_proof'][
+      'revealed_attrs']['0_mail_uuid']['raw']
   #----------------------------------------------#
   # state = r20.json()['results'][0]['state']
   # # r_mobile = r20.json()['results'][0]['presentation']['proof']['proofs'][0]['primary_proof']['ge_proofs'][0]['predicate']['value']
@@ -461,30 +494,33 @@ def viewpresentation():
   # r_address = r20.json()['results']
   # r_mail = r20.json()['results']
   #-----------------------------------------------#
-#   pres_ex_id = r20.json()['results'][0]['pres_ex_id']
-# #view presentation with pres_ex_id
-#   url21 = "http://" + app.config[
-#   "FABER_HOST"] + "/present-proof-2.0/records/" + pres_ex_id
-#   headers21 = {'Content-type': 'application/json'}
-#   r21 = requests.get(url21, headers=headers21)
-#   r_name = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['name']
+  #   pres_ex_id = r20.json()['results'][0]['pres_ex_id']
+  # #view presentation with pres_ex_id
+  #   url21 = "http://" + app.config[
+  #   "FABER_HOST"] + "/present-proof-2.0/records/" + pres_ex_id
+  #   headers21 = {'Content-type': 'application/json'}
+  #   r21 = requests.get(url21, headers=headers21)
+  #   r_name = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['name']
 
-#   r_phone = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['mobile_number']
+  #   r_phone = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['m']['mobile_number']
 
-#   r_address = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['address']
+  #   r_address = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['address']
 
-#   r_mail = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['mail']
-#   state = r21.json()['state']
+  #   r_mail = r21.json()['by_format']['pres']['indy']['proof']['proofs'][0]['primary_proof']['eq_proof']['revealed_attrs']['mail']
+  #   state = r21.json()['state']
   return render_template('view_presetation.html',
-                         result=state, name=r_name,
+                         result=state,
+                         name=r_name,
                          address=r_address,
                          mail=r_mail,
                          login=("/login"),
-                        createaccount=("/createaccount"))
+                         createaccount=("/createaccount"))
+
 
 @app.route("/createaccount")
 def createaccount():
   return render_template("account_created.html")
+
 
 # @app.route("/sendpresentation")
 # def sendpresentation():
@@ -498,11 +534,13 @@ def createaccount():
 #     mobile_number = attributes.get("mobile_number"),
 #     address = attributes.get("address"), login=("/login"))
 
+
 @app.route('/hotelagent')
 def hotel_agent():
-    return render_template('hotel_homepage.html',
-                          presentreq="/hotelpresentation_req",
-                          viewpresentation="/hotelviewpresentation", hotelinvite="/hotel_create_invite")
+  return render_template('hotel_homepage.html',
+                         presentreq="/hotelpresentation_req",
+                         viewpresentation="/hotelviewpresentation",
+                         hotelinvite="/hotel_create_invite")
 
 
 @app.route('/hotel_create_invite')
@@ -523,14 +561,15 @@ def hotel_create_invitation():
   img.save("static/images/displayQrInvite.png")
   print(img)
 
-  return render_template('hotel_invite.html', result1=invitation.replace("'", "\""))
+  return render_template('hotel_invite.html',
+                         result1=invitation.replace("'", "\""))
 
 
 @app.route('/hotelpresentation_req')
 def hotel_presentation_req():
   # cred_ex_id = session.get('cred_def_id')
 
-  #connection_Id  
+  #connection_Id
   url = "http://" + app.config["ALICE_HOST"] + "/connections?state=active"
   headers = {'Accept': 'application/json'}
   r4 = requests.get(url, headers=headers)
@@ -540,8 +579,8 @@ def hotel_presentation_req():
   conn_id = session.get('connectionid')
 
   # conn_id2 = session.get('connectionid')
-  return render_template('hotel_presentation_req.html',  
-                         conn_id=conn_id)
+  return render_template('hotel_presentation_req.html', conn_id=conn_id)
+
 
 @app.route('/hotelpresentation_req', methods=['POST'])
 def hotel_presentationreq():
@@ -553,14 +592,13 @@ def hotel_presentationreq():
   rjson19 = json.loads(r19.text)['state']
 
   return render_template('hotel_send_presentation_req.html',
-   result=rjson19,
-   login=("/login"))
+                         result=rjson19,
+                         login=("/login"))
 
 
 @app.route('/hotelviewpresentation')
 def hotel_viewpresentation():
-  url20 = "http://" + app.config[
-  "ALICE_HOST"] + "/present-proof/records"
+  url20 = "http://" + app.config["ALICE_HOST"] + "/present-proof/records"
   headers20 = {'Content-type': 'application/json'}
   r20 = requests.get(url20, headers=headers20)
   #-------------------------------------------#
@@ -569,19 +607,24 @@ def hotel_viewpresentation():
   # r_mail = r20.json()['results'][1]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
   #-----------------------------------------------#
   state = r20.json()['results'][0]['state']
-  r_name = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_name_uuid']['raw']
-  r_mail = r20.json()['results'][0]['presentation']['requested_proof']['revealed_attrs']['0_mail_uuid']['raw']
+  r_name = r20.json()['results'][0]['presentation']['requested_proof'][
+      'revealed_attrs']['0_name_uuid']['raw']
+  r_mail = r20.json()['results'][0]['presentation']['requested_proof'][
+      'revealed_attrs']['0_mail_uuid']['raw']
   #-----------------------------------------------#
 
   return render_template('hotel_view_presentation.html',
-                         result=state, name=r_name,
+                         result=state,
+                         name=r_name,
                          mail=r_mail,
                          login=("/login"),
                          verifyguest=("/verifyguest"))
 
+
 @app.route("/verifyguest")
 def verifyguest():
   return render_template("guest_verified.html")
-  
+
+
 if __name__ == "__main__":
   app.run(host='0.0.0.0', debug=True)

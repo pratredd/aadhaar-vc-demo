@@ -1,0 +1,40 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+input[type="file"] {
+  display: none;
+}
+ 
+label {
+  display: inline-block;
+  background-color: darkblue;
+  padding: 1em 2em;
+  font-size: 1em;
+  color: #fff;
+}
+</style>
+<body>
+<input type="file" accept="image/*" capture="camera" id="photo">
+<label for="photo">
+  Open Camera
+</label>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camera Capture</title>
+</head>
+<body>
+<h1>Camera Capture</h1>
+<form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+<input type="file" accept="image/*" capture="environment" id="capture" name="image">
+<button type="submit">Upload</button>
+</form>
+</body>
+</html>

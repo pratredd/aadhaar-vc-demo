@@ -1,40 +1,32 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<style>
-input[type="file"] {
-  display: none;
-}
- 
-label {
-  display: inline-block;
-  background-color: darkblue;
-  padding: 1em 2em;
-  font-size: 1em;
-  color: #fff;
-}
-</style>
-<body>
-<input type="file" accept="image/*" capture="camera" id="photo">
-<label for="photo">
-  Open Camera
-</label>
-</body>
-</html> -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Camera Capture</title>
+<title>Image Upload</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<h1>Camera Capture</h1>
-<form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-<input type="file" accept="image/*" capture="environment" id="capture" name="image">
-<button type="submit">Upload</button>
-</form>
+<input type="file" accept="image/*" id="imageInput">
+<button onclick="uploadImage()">Upload Image</button>
+<script>
+       function uploadImage() {
+           var fileInput = document.getElementById('imageInput');
+           var file = fileInput.files[0];
+           var formData = new FormData();
+           formData.append('image', file);
+           $.ajax({
+               url: '/upload',
+               type: 'POST',
+               data: formData,
+               processData: false,
+               contentType: false,
+               success: function(response) {
+                   console.log(response);
+               },
+               error: function(xhr, status, error) {
+                   console.error(error);
+               }
+           });
+       }
+</script>
 </body>
 </html>

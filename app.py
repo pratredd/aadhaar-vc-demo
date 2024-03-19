@@ -1,11 +1,13 @@
 import json
 import base64
+from flask.templating import render_template_string
 import identity.web
 import qrcode
 import requests
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 from datetime import datetime
-
+import cv2
+import face_recognition
 import app_config
 from flask_session import Session
 
@@ -70,15 +72,39 @@ def identityrepublic():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-   if 'image' in request.files:
-       image = request.files['image']
-       # Process the image file here (e.g., save it to a folder, perform some operations)
-       image_data = image.read()
-       # Example: Encode image data to base64
-       encoded_image = base64.b64encode(image_data).decode('utf-8')
-       return f'Successfully uploaded image. Base64 encoded image data: {encoded_image}'
-   return 'No image received'
+  if 'image' not in request.files:
+     return 'No image found', 400
+  image = request.files['image']
+  # Process the image as needed, e.g., save to sedisk
+  image.save('static/images/picture.jpg')
+  return 'Image uploaded successfully'
 
+def find_face_encodings(image_path):
+  image = cv2.imread(image_path)
+  face_enc = face_recognition.face_encodings(image)
+  return face_enc[0]
+  
+@app.route('/compare')
+def imagecompare():
+  #getting face encodings for both images
+  image_1=find_face_encodings("static/images/picture.jpg")
+  image_2=find_face_encodings("static/images/Harika.jpg")
+
+#checking if both images are same
+  face_recognition.compare_faces([image_1], image_2)[0]
+  print(f"Is same: {is_same}")
+  if is_same:
+    distance = face_recognition.face_distance([image_1], image_2)
+    distance = round(distance[0] * 100)
+
+#calculating accuracy level
+    accuracy = 100 - round(distance)
+    print("The images are same")
+    print(f"Accuracy level: {accuracy}%")
+  else:
+    print("The images are not same")
+  return render_template("picture.html", picture=picture)
+  
 @app.route(app_config.REDIRECT_PATH)
 def auth_response():
   result = auth.complete_log_in(request.args)

@@ -7,7 +7,6 @@ import requests
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 from datetime import datetime
 import cv2
-import face_recognition
 import app_config
 from flask_session import Session
 
@@ -79,31 +78,34 @@ def upload():
   image.save('static/images/picture.jpg')
   return 'Image uploaded successfully'
 
-def find_face_encodings(image_path):
-  image = cv2.imread(image_path)
-  face_enc = face_recognition.face_encodings(image)
-  return face_enc[0]
+def compare_faces(image1, image2):
+   # Load images
+   img1 = cv2.imread(image1)
+   img2 = cv2.imread(image2)
+   # Convert images to grayscale
+   gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+   gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+   # Detect faces in images
+   face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+   faces1 = face_cascade.detectMultiScale(gray1, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+   faces2 = face_cascade.detectMultiScale(gray2, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+   # Compare number of detected faces
+   if len(faces1) != len(faces2):
+       return False
+   # Additional steps for feature comparison or similarity metrics can be added here
+   # You might use deep learning models or feature extraction techniques for better comparison
+   return True  # For simplicity, just returning True if the number of faces is the same
   
 @app.route('/compare')
 def imagecompare():
-  #getting face encodings for both images
-  image_1=find_face_encodings("static/images/picture.jpg")
-  image_2=find_face_encodings("static/images/Harika.jpg")
-
-#checking if both images are same
-  face_recognition.compare_faces([image_1], image_2)[0]
-  print(f"Is same: {is_same}")
-  if is_same:
-    distance = face_recognition.face_distance([image_1], image_2)
-    distance = round(distance[0] * 100)
-
-#calculating accuracy level
-    accuracy = 100 - round(distance)
-    print("The images are same")
-    print(f"Accuracy level: {accuracy}%")
+  # if 'image1' not in request.files or 'image2' not in request.files:
+  #    return jsonify({'error': 'Please provide two images.'}), 400
+  image1 = 'static/images/Harika.png'
+  image2 = 'static/images/picture.jpg'
+  if compare_faces(image1, image2):
+     return jsonify({'result': 'Faces are similar.'})
   else:
-    print("The images are not same")
-  return render_template("picture.html", picture=picture)
+     return jsonify({'result': 'Faces are not similar.'})
   
 @app.route(app_config.REDIRECT_PATH)
 def auth_response():

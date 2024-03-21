@@ -68,16 +68,16 @@ def identityrepublic():
   # img.save("static/images/displayQrInvite.png")
   # print(img)
   
-  return render_template("aadhaar_index.html")
+  return render_template("aadhaar_index.html", compare=("/compare"))
 
 @app.route('/upload', methods=['POST'])
 def upload():
-  if 'image' not in request.files:
-     return 'No image found', 400
+  # if 'image' not in request.files:
+  #    return 'No image found', 400
   image = request.files['image']
   # Process the image as needed, e.g., save to sedisk
   image.save('static/images/picture.jpg')
-  return 'Image uploaded successfully'
+  return render_template("compare.html")
 
 
 @app.route('/compare')

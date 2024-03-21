@@ -9,6 +9,7 @@ from datetime import datetime
 import cv2
 import app_config
 from flask_session import Session
+import numpy as np
 
 __version__ = "0.7.0"  # The version of this sample, for troubleshooting purpose
 
@@ -78,34 +79,51 @@ def upload():
   image.save('static/images/picture.jpg')
   return 'Image uploaded successfully'
 
-def compare_faces(image1, image2):
-   # Load images
-   img1 = cv2.imread(image1)
-   img2 = cv2.imread(image2)
-   # Convert images to grayscale
-   gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-   gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-   # Detect faces in images
-   face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-   faces1 = face_cascade.detectMultiScale(gray1, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-   faces2 = face_cascade.detectMultiScale(gray2, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-   # Compare number of detected faces
-   if len(faces1) != len(faces2):
-       return False
-   # Additional steps for feature comparison or similarity metrics can be added here
-   # You might use deep learning models or feature extraction techniques for better comparison
-   return True  # For simplicity, just returning True if the number of faces is the same
-  
+
 @app.route('/compare')
 def imagecompare():
-  # if 'image1' not in request.files or 'image2' not in request.files:
-  #    return jsonify({'error': 'Please provide two images.'}), 400
-  image1 = 'static/images/Harika.png'
-  image2 = 'static/images/picture.jpg'
-  if compare_faces(image1, image2):
-     return jsonify({'result': 'Faces are similar.'})
+  # Load the pre-trained face detection model
+  face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+  image1 = cv2.imread('static/images/Harika.png')
+  image2 = cv2.imread('static/images/picture.jpg')
+
+  # Convert images to grayscale
+  gray1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+  gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+
+  # Detect faces in both images
+  faces1 = face_cascade.detectMultiScale(gray1, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+  faces2 = face_cascade.detectMultiScale(gray2, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+  # If faces are detected in both images
+  if len(faces1) > 0 and len(faces2) > 0:
+      # Extract the first face from the first image
+      x1, y1, w1, h1 = faces1[0]
+      face1 = gray1[y1:y1+h1, x1:x1+w1]
+
+      # Extract the first face from the second image
+      x2, y2, w2, h2 = faces2[0]
+      face2 = gray2[y2:y2+h2, x2:x2+w2]
+
+      # Resize the faces to a fixed size for recognition
+      face1 = cv2.resize(face1, (100, 100))
+      face2 = cv2.resize(face2, (100, 100))
+
+      # Calculate the absolute difference between the two faces
+      diff = cv2.absdiff(face1, face2)
+
+      # Calculate the mean absolute difference
+      mean_diff = np.mean(diff)
+
+      # If the mean absolute difference is below a certain threshold, consider the faces to be similar
+      if mean_diff < 50:  # Adjust this threshold according to your requirements
+          return "Similar faces detected."
+      else:
+          return "Faces are not similar."
   else:
-     return jsonify({'result': 'Faces are not similar.'})
+      return "No faces detected in one or both images."
+  
   
 @app.route(app_config.REDIRECT_PATH)
 def auth_response():

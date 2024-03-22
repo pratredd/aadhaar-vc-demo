@@ -118,11 +118,11 @@ def imagecompare():
 
       # If the mean absolute difference is below a certain threshold, consider the faces to be similar
       if mean_diff < 50:  # Adjust this threshold according to your requirements
-          return "Similar faces detected."
+          return render_template("aadhaar_homepage.html", createinvite="/create_invite", sendoffer="/send_offer")
       else:
-          return "Faces are not similar."
+          return render_template("Unauthenticate.html")
   else:
-      return "No faces detected in one or both images."
+      return render_template("face_error.html")
   
   
 @app.route(app_config.REDIRECT_PATH)

@@ -5,22 +5,33 @@
 <title>SSI Web App: Login</title>
 <style>
   body {
-    background-color: white
+    background-image: url('static/images/4.png');
+    background-size: cover;
+      transform: scale(1.0);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f0f0f0;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
       }
 .container {
+  background-size: cover;
   color: black;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 80%;
+  font-family: "Showcard Gothic", Times, serif;
+  font-size: 25px;
 background-color: lightblue;
+  display: flex;
 }
 .button {
   background-color: lightblue;
   color: black;
   border: 2px solid #add8e6;
-  height: 50px;
+  height: 75px;
 
 }
-
 .button:hover {
   text-decoration: none;
      background-color: white;
@@ -30,42 +41,57 @@ background-color: lightblue;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-block-start: 50px;
+  margin-left: -1000px;
 }
-.container1{
-background-color: white;}
+ .container2 {
+  font-family: "Showcard Gothic", Times, serif;
+  padding-bottom: 100px;
+  margin-block-start: 70px;
+  margin-left: 3000px;
+  padding-top: 150px;
+font-size: 30px;} 
 
 h4{
-color:black;
+color:white;
 font-family: "Times New Roman", Times, serif;
 font-size: 15px;
 }
+  h3{
+  color:black;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 30px;
+  }
+
 
   </style>
 </head>
 <body>
 <div class = container>
-<img src="static/images/logo.png" width="50px",height="50px" >
-<h1>SSI Web App</h1>
-</div>
-<div class = container1>
-<br>  
+<img src="static/images/logo.png" width="100px",height="100px" >
+
+<h1>Identity Republic</h1></div>
+  <br><br>
+
+
+<div class = container1> 
+<br><br><br><br><br>
 <!-- <div class = center>    
 <ul><button class="button button1"><a href='{{ auth_uri }}'><h4>Sign In</h4></a></button></ul></div> -->
 <div class = center>   
-<ul><button class="button button1"><a href='{{ aadhaar }}'><h4>Go to Aadhaar Agent</h4></a></button></ul></div>
+<ul><button class="button button1"><a href='{{ aadhaar }}'><h3>Go to Aadhaar Agent</h3></a></button></ul></div>
 <div class = center>
 <!-- <ul><button class="button button1"><a href='{{ alice }}'> <h4>Go to Alice Agent</h4></a></button></ul></div>
 <div class = center> -->
-<ul><button class="button button1"><a href='{{ bank }}'><h4>Go to Bank</h4></a></button></ul></div>
+<ul><button class="button button1"><a href='{{ bank }}'><h3>Go to Bank</h3></a></button></ul></div>
 
   <div class = center>   
-  <ul><button class="button button1"><a href='{{ hotel }}'><h4>Go to Hotel</h4></a></button></ul></div>
+  <ul><button class="button button1"><a href='{{ hotel }}'><h3>Go to Hotel</h3></a></button></ul></div>
   <div class = center>
     
-<br><br><br>
-   <h4>*This is page for convenient navigation</h4>
-
-    <hr>
-<footer style="text-align: right">SSI Web App Sample {{ version }}</footer></div>
+   <!-- <h4>*This is page for convenient navigation</h4> -->
+    <div class = container2>
+    
+<footer style="text-align: right"><h4>Identity Republic {{ version }}</h4></footer></div>
 </body>
 </html>

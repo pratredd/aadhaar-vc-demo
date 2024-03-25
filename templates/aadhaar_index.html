@@ -3,9 +3,59 @@
 <head>
 <title>Open Camera URL</title>
 </head>
+  <style>
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+    }
+    body {
+    background-image: url('static/images/4.png');
+    background-size: cover;
+      transform: scale(1.0);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f0f0f0;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      }
+    .container {
+      background-size: cover;
+      color: black;
+      font-family: "Showcard Gothic", Times, serif;
+      font-size: 25px;
+    background-color: lightblue;
+      display: flex;
+    }
+    .button {
+    background-color: lightblue;
+    color: black;
+    border: 2px solid #add8e6;
+    height: 50px;
+      width: 70px;
+    }
+    h1 {
+      background-color: lightblue;
+    }
+  </style>
 <body>
+  <div class = container>
+  <img src="static/images/logo.png" width="100px",height="100px" >
+
+  <h1>Identity Republic</h1></div>
+    <br><br>
+  <br><br>
+  <br><br><br>  <br><br><br>
+<div class = center>
 <h1>Scan this QR code to open camera</h1>
-  <img src="static/images/displayQrInvite.png" width="300px" height="300px">
-  <ul><button class="button button1"><a href='{{ compare }}'><h4>COMPARE</h4></a></button></ul></div>
+</div><br>
+  <div class = center>
+  <img src="static/images/displayQrInvite.png" width="300px" height="300px"></div><br>
+    <div class = center>
+  <ul><button class="button button1"><a href='{{ compare }}'><h4>SIGN IN</h4></a></button></ul></div>
 </body>
 </html>

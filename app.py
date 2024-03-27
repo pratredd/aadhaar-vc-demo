@@ -170,7 +170,7 @@ def call_downstream_api():
 
 @app.route('/aadhaaragent')
 def aadhar_agent():
-  return render_template('aadhaar_index.html',
+  return render_template('aadhaar_homepage.html',
                          createinvite="/create_invite",
                          publishschema="/publish_schema",
                          acceptrequest="/accept_request",

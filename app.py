@@ -58,7 +58,7 @@ def opencam():
 def identityrepublic():
   # Generate QR code for the URL of the HTML file
   html_file_path = 'templates/open_cam.html'  # Adjust the path as needed
-  url = 'https://ba8c173a-2eaa-4481-b6c3-96e42e3a2c87-00-2mrtth7y3p3hb.sisko.replit.dev/opencam'
+  url = 'https://8e9a0ed1-7298-41c2-9b5a-0f1ed7de4b6d-00-1syp1b7u2ii08.pike.replit.dev/opencam'
   qr = qrcode.make(url)
   # Save the QR code image to a file
   qr_path = 'static/qrcode.png'
@@ -67,7 +67,7 @@ def identityrepublic():
   # img = qrcode.make(url)
   # img.save("static/images/displayQrInvite.png")
   # print(img)
-  
+
   return render_template("aadhaar_index.html", compare=("/compare"))
 
 @app.route('/upload', methods=['POST'])
@@ -123,8 +123,8 @@ def imagecompare():
           return render_template("Unauthenticate.html")
   else:
       return render_template("face_error.html")
-  
-  
+
+
 @app.route(app_config.REDIRECT_PATH)
 def auth_response():
   result = auth.complete_log_in(request.args)
